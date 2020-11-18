@@ -1,0 +1,5 @@
+# ninja log v5
+497	564	1605724914393713000	src/input/src/libinput.a	47cc78ba75ef6c28
+7	497	1605724914321156723	src/input/src/CMakeFiles/input.dir/test.cpp.o	a5250580518cd253
+1848	2382	1605725499031419116	src/Task1	7eca0cf60e540999
+3	1848	1605725498490427426	src/CMakeFiles/Task1.dir/main.cpp.o	f3cf6405cbecfbe0

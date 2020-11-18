@@ -1,0 +1,12 @@
+/Users/josefkamysek/Documents/University/Lab/Homework/task1/build/CMakeFiles/rebuild_cache.dir
+/Users/josefkamysek/Documents/University/Lab/Homework/task1/build/CMakeFiles/edit_cache.dir
+/Users/josefkamysek/Documents/University/Lab/Homework/task1/build/src/CMakeFiles/rebuild_cache.dir
+/Users/josefkamysek/Documents/University/Lab/Homework/task1/build/src/CMakeFiles/edit_cache.dir
+/Users/josefkamysek/Documents/University/Lab/Homework/task1/build/src/CMakeFiles/Task1.dir
+/Users/josefkamysek/Documents/University/Lab/Homework/task1/build/src/input/CMakeFiles/rebuild_cache.dir
+/Users/josefkamysek/Documents/University/Lab/Homework/task1/build/src/input/CMakeFiles/edit_cache.dir
+/Users/josefkamysek/Documents/University/Lab/Homework/task1/build/src/input/src/CMakeFiles/rebuild_cache.dir
+/Users/josefkamysek/Documents/University/Lab/Homework/task1/build/src/input/src/CMakeFiles/edit_cache.dir
+/Users/josefkamysek/Documents/University/Lab/Homework/task1/build/src/input/src/CMakeFiles/input.dir
+/Users/josefkamysek/Documents/University/Lab/Homework/task1/build/src/input/include/CMakeFiles/rebuild_cache.dir
+/Users/josefkamysek/Documents/University/Lab/Homework/task1/build/src/input/include/CMakeFiles/edit_cache.dir
