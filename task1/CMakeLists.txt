@@ -6,4 +6,5 @@ project(Task1 VERSION 0.1.0)
 set(CMAKE_CXX_STANDARD 17)
 
 # subdirectories
+add_subdirectory(libs)
 add_subdirectory(src)

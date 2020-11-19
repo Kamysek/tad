@@ -13,6 +13,8 @@
         "vector": "cpp",
         "utility": "cpp",
         "type_traits": "cpp",
-        "chrono": "cpp"
+        "chrono": "cpp",
+        "__tree": "cpp",
+        "iostream": "cpp"
     }
 }
