@@ -7,4 +7,4 @@ add_library(input STATIC readInput.cpp readInput.h)
 target_include_directories(input PRIVATE global)
 
 # link libraries
-target_link_libraries(input PRIVATE global OpenCV)
+target_link_libraries(input PRIVATE utility OpenCV)

@@ -1,20 +1,26 @@
 #pragma once
 
-#include "../global/enum.h"
-#include <string>
+#include "../utility/utility.h"
 #include <map>
+#include <string>
 #include <utility>
 #include <opencv2/opencv.hpp>
 
+using namespace utility;
+using namespace std;
+using namespace cv;
+
 namespace input {
-    std::map<global::ImageID, std::map<global::TeaBoxCorner, cv::Point2d>> image2DCoordinates();
+    map<ImageID, map<TeaBoxCorner, Point2d>> image2DCoordinates();
 
-    std::map<global::ImageID, std::string> imageLocation(); 
+    map<TeaBoxCorner, Point3d> teabox3DCoordinates();
 
-    std::map<global::ImageID, std::string> imageWriteLocation(); 
+    map<ImageID, string> imageLocation(); 
 
-    std::map<global::ImageID, std::string> matlabWriteLocationTask1b(); 
+    map<ImageID, string> imageWriteLocation(); 
 
-    std::map<global::TeaBoxCorner, cv::Point3d> teabox3DCoordinates();
+    map<ImageID, string> matlabWriteLocationTask1a(); 
+
+    map<ImageID, string> matlabWriteLocationTask1b(); 
     
 } // namespace input

@@ -1,14 +1,13 @@
 #include "readInput.h"
-#include "../global/enum.h"
-#include <string>
+#include "../utility/utility.h"
 #include <map>
+#include <string>
 #include <utility>
 #include <opencv2/opencv.hpp>
 
-using namespace global;
+using namespace utility;
+using namespace std;
 using namespace cv;
-
-using std::string, std::map, std::pair;
 
 namespace input {
    
@@ -160,20 +159,36 @@ namespace input {
         return imageLocation;
     } 
 
+    map<ImageID, string> matlabWriteLocationTask1a() 
+    {
+        map<ImageID, string> matlabWriteLocation;
+        
+        matlabWriteLocation.insert(pair<ImageID, string>(DSC_9743, "../../resources/matlab/task1a/DSC_9743_Keypoints.m"));
+        matlabWriteLocation.insert(pair<ImageID, string>(DSC_9744, "../../resources/matlab/task1a/DSC_9744_Keypoints.m"));
+        matlabWriteLocation.insert(pair<ImageID, string>(DSC_9745, "../../resources/matlab/task1a/DSC_9745_Keypoints.m"));
+        matlabWriteLocation.insert(pair<ImageID, string>(DSC_9746, "../../resources/matlab/task1a/DSC_9746_Keypoints.m"));
+        matlabWriteLocation.insert(pair<ImageID, string>(DSC_9747, "../../resources/matlab/task1a/DSC_9747_Keypoints.m"));
+        matlabWriteLocation.insert(pair<ImageID, string>(DSC_9748, "../../resources/matlab/task1a/DSC_9748_Keypoints.m"));
+        matlabWriteLocation.insert(pair<ImageID, string>(DSC_9749, "../../resources/matlab/task1a/DSC_9749_Keypoints.m"));
+        matlabWriteLocation.insert(pair<ImageID, string>(DSC_9750, "../../resources/matlab/task1a/DSC_9750_Keypoints.m"));
+
+        return matlabWriteLocation;
+    } 
+
     map<ImageID, string> matlabWriteLocationTask1b() 
     {
-        map<ImageID, string> imageLocation;
+        map<ImageID, string> matlabWriteLocation;
         
-        imageLocation.insert(pair<ImageID, string>(DSC_9743, "../../resources/init_texture/matlab/task1b/DSC_9743_Keypoints.txt"));
-        imageLocation.insert(pair<ImageID, string>(DSC_9744, "../../resources/init_texture/matlab/task1b/DSC_9744_Keypoints.txt"));
-        imageLocation.insert(pair<ImageID, string>(DSC_9745, "../../resources/init_texture/matlab/task1b/DSC_9745_Keypoints.txt"));
-        imageLocation.insert(pair<ImageID, string>(DSC_9746, "../../resources/init_texture/matlab/task1b/DSC_9746_Keypoints.txt"));
-        imageLocation.insert(pair<ImageID, string>(DSC_9747, "../../resources/init_texture/matlab/task1b/DSC_9747_Keypoints.txt"));
-        imageLocation.insert(pair<ImageID, string>(DSC_9748, "../../resources/init_texture/matlab/task1b/DSC_9748_Keypoints.txt"));
-        imageLocation.insert(pair<ImageID, string>(DSC_9749, "../../resources/init_texture/matlab/task1b/DSC_9749_Keypoints.txt"));
-        imageLocation.insert(pair<ImageID, string>(DSC_9750, "../../resources/init_texture/matlab/task1b/DSC_9750_Keypoints.txt"));
+        matlabWriteLocation.insert(pair<ImageID, string>(DSC_9743, "../../resources/matlab/task1b/DSC_9743_Keypoints.m"));
+        matlabWriteLocation.insert(pair<ImageID, string>(DSC_9744, "../../resources/matlab/task1b/DSC_9744_Keypoints.m"));
+        matlabWriteLocation.insert(pair<ImageID, string>(DSC_9745, "../../resources/matlab/task1b/DSC_9745_Keypoints.m"));
+        matlabWriteLocation.insert(pair<ImageID, string>(DSC_9746, "../../resources/matlab/task1b/DSC_9746_Keypoints.m"));
+        matlabWriteLocation.insert(pair<ImageID, string>(DSC_9747, "../../resources/matlab/task1b/DSC_9747_Keypoints.m"));
+        matlabWriteLocation.insert(pair<ImageID, string>(DSC_9748, "../../resources/matlab/task1b/DSC_9748_Keypoints.m"));
+        matlabWriteLocation.insert(pair<ImageID, string>(DSC_9749, "../../resources/matlab/task1b/DSC_9749_Keypoints.m"));
+        matlabWriteLocation.insert(pair<ImageID, string>(DSC_9750, "../../resources/matlab/task1b/DSC_9750_Keypoints.m"));
 
-        return imageLocation;
+        return matlabWriteLocation;
     } 
 
 } // namespace input
