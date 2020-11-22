@@ -1,4 +1,6 @@
 #include "math.h"
+#include "raybox.h"
+#include "customGeometry.h"
 #include "global/enum.h"
 #include "global/helper.h"
 #include "input/readInput.h"
@@ -19,6 +21,9 @@ double f_y = 2960.37845;
 double c_x = 1841.68855;
 double c_y = 1235.23369;
 
+// Input camera matrix
+Mat cameraMatrix = (Mat_<double>(3,3) << f_x, 0, c_x, 0 , f_y, c_y, 0, 0, 1);
+
 /*
 
 Solution for task1
@@ -29,14 +34,14 @@ The values printed in the terminal from task1 are used to plot the camera positi
 This is done using Matlab (see matlab/plot1a.m and matlab/plot1a.fig)
 
 */
-map<ImageID, pair<Mat, Mat>> task1a()
+map<ImageID, map<string, Mat>> task1a()
 {
 
     // Load 3D teabox coordinates, image location and provided 2D image coordinates
     map<TeaBoxCorner, Point3d> tb3DCoordinates = input::teabox3DCoordinates();
     map<ImageID, string> imgLocation = input::imageLocation();
     map<ImageID, map<TeaBoxCorner, Point2d>> img2DCoordinates = input::image2DCoordinates();
-    map<ImageID, pair<Mat, Mat>> RotationMatrixAndTranslationVector;
+    map<ImageID, map<string, Mat>> rotationMatrixAndTranslationVector;
 
     // Cycle through images
     for ( int iidInt = DSC_9743; iidInt != LASTIID; iidInt++ )
@@ -80,9 +85,6 @@ map<ImageID, pair<Mat, Mat>> task1a()
         Mat rotationVect; 
         Mat translationVect;        
 
-        // Input camera matrix
-        Mat cameraMatrix = (cv::Mat_<double>(3,3) << f_x, 0, c_x, 0 , f_y, c_y, 0, 0, 1);
-
         // Dist coeffs
         Mat distCoeffs = cv::Mat::zeros(4,1,cv::DataType<double>::type); 
 
@@ -92,7 +94,7 @@ map<ImageID, pair<Mat, Mat>> task1a()
         // Obtrain rotation matrix through rodrigues
         Mat rotationMatrix;
         Rodrigues(rotationVect, rotationMatrix);
-        global::printMat("RotationMatrix", rotationMatrix);
+        global::printMat("Rotation Matrix", rotationMatrix);
 
         // Calculate camera position
         translationVect = -rotationMatrix.t() * translationVect;
@@ -101,12 +103,17 @@ map<ImageID, pair<Mat, Mat>> task1a()
         // Calculate camera direction
         Mat vector = (Mat_<double>(3, 1) << 0, 0, 1);
         cout << vector.size << endl;
-        rotationMatrix = rotationMatrix.t() * vector;
+        Mat cameraDirection = rotationMatrix.t() * vector;
         global::printMat("Camera Direction", rotationMatrix);
 
-        RotationMatrixAndTranslationVector.insert(pair(iid, pair(rotationMatrix, translationVect)));
+        map<string, Mat> storage;
+        storage.insert(pair("rotation", rotationMatrix));
+        storage.insert(pair("position", translationVect));
+        storage.insert(pair("direction", cameraDirection));
+
+        rotationMatrixAndTranslationVector.insert(pair(iid, storage));
     }
-    return RotationMatrixAndTranslationVector;
+    return rotationMatrixAndTranslationVector;
 }
 
 /*
@@ -120,12 +127,30 @@ This is done using Matlab (see matlab/plot1a.m and matlab/plot1a.fig)
 
 */
 
-void task1b(){
+pair<intersection::Vec3f, intersection::Vec3f> convert2DPointTo3DRay(map<string, Mat> rotationTranslationDirection, Point2d m){
+    //int lambda = 20;
+    
+    // extract rotation matrix and camera position
+    Mat rotationMatrix = rotationTranslationDirection["rotation"];
+    Mat cameraPosition = rotationTranslationDirection["position"];
+
+    // Create homogeneous point
+    Mat homogeneousPoint = (Mat_<double>(3, 1) << m.x, m.y, 1);
+
+    // Get world coordinates
+    homogeneousPoint = (cameraMatrix * rotationMatrix).inv() * homogeneousPoint;
+
+    // Add camera origin and direction
+    intersection::Vec3f origin = intersection::Vec3f(cameraPosition.at<double>(0,0), cameraPosition.at<double>(0,1), cameraPosition.at<double>(0,2));
+    intersection::Vec3f direction = intersection::Vec3f(homogeneousPoint.at<double>(0,0), homogeneousPoint.at<double>(0,1), homogeneousPoint.at<double>(0,2));
+    return pair(origin, direction);
+}
+
+void task1b(map<ImageID, map<string, Mat>> rotationTranslationDirectionInformation){
 
     // Load 3D teabox coordinates, image location and provided 2D image coordinates
     map<TeaBoxCorner, Point3d> tb3DCoordinates = input::teabox3DCoordinates();
     map<ImageID, string> imgLocation = input::imageLocation();
-    map<ImageID, map<TeaBoxCorner, Point2d>> img2DCoordinates = input::image2DCoordinates();
     
     // Cycle through images
     for ( int iidInt = DSC_9743; iidInt != LASTIID; iidInt++ )
@@ -133,18 +158,8 @@ void task1b(){
         ImageID iid = static_cast<ImageID>(iidInt);
         cout << "Calculated Information for Image" + std::to_string(iid) << endl;
 
-        // Load 2D coordinates for given image
-        map<TeaBoxCorner, Point2d> img2DCords = img2DCoordinates[iid];
-        if(img2DCoordinates.empty())
-        {
-            cout << "Could not load 2D coordinates of image: " + std::to_string(iid) << endl;
-            return;
-        }
-
-        // Map 2D points to 3D rays
-
-
-
+        // Extract rotation position translation information
+        map<string, Mat> rotationTranslationDirection = rotationTranslationDirectionInformation[iid];
 
         // Load image
         Mat img = imread(imgLocation[iid], IMREAD_GRAYSCALE);
@@ -158,10 +173,29 @@ void task1b(){
         Ptr<SIFT> detector = SIFT::create();
         std::vector<KeyPoint> keypoints;
         detector->detect(img, keypoints);
-        
+
+        // Create boundary box 
+        intersection::AABBox box(intersection::Vec3f(0,0,0), intersection::Vec3f(0.165, 0.063, 0.093)); 
+        // Store box keypoints
+        std::vector<KeyPoint> tmpKeypoints;
+        // Cycle through all keypoints to check if they intersect with the box
+        for(std::vector<KeyPoint>::iterator iter = keypoints.begin(); iter != keypoints.end(); ++iter) {
+            // Map 2D points to 3D rays
+            Point2d pointOnTeabox = Point2d((*iter).pt.x, (*iter).pt.y);
+            pair<intersection::Vec3f,intersection::Vec3f> calculatedRay = convert2DPointTo3DRay(rotationTranslationDirection, pointOnTeabox);
+
+            // Calculate intersection with box
+            intersection::Ray ray(calculatedRay.first, calculatedRay.second.normalize()); 
+            float t; 
+            if (box.intersect(ray, t)) { 
+                // Store intersection point
+                tmpKeypoints.push_back(*iter);  
+            } 
+        }
+            
         // Draw keypoints on picture
         Mat output;
-        drawKeypoints(img, keypoints, output);
+        drawKeypoints(img, tmpKeypoints, output);
         
         // Show detected keypoints
         imshow("Keypoints 1", output);
@@ -170,13 +204,6 @@ void task1b(){
 
     }
 }
-
-// Point3d convert2DPointTo3DRay(Point2d m){
-
-//     // Calculate 
-
-//     retunr 
-// }
 
 int main()
 {
@@ -188,8 +215,8 @@ int main()
             "This is done using Matlab (see matlab/plot1a.m and matlab/plot1a.fig) \n"
     << endl;
 
-    map<ImageID, pair<Mat, Mat>> RotationAndTranslation = task1a();
+    map<ImageID, map<string, Mat>> RotationAndTranslation = task1a();
     
-    //task1b();
+    task1b(RotationAndTranslation);
 
 }

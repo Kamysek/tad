@@ -15,4 +15,4 @@ add_subdirectory(global)
 add_subdirectory(input)
 
 # link libraries
-target_link_libraries(Task1 PRIVATE OpenCV global input)
+target_link_libraries(Task1 PRIVATE OpenCV global input intersection)
