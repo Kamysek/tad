@@ -144,4 +144,36 @@ namespace input {
         return imageLocation;
     } 
 
+    map<ImageID, string> imageWriteLocation() 
+    {
+        map<ImageID, string> imageLocation;
+        
+        imageLocation.insert(pair<ImageID, string>(DSC_9743, "../../resources/init_texture/DSC_9743_Keypoints.JPG"));
+        imageLocation.insert(pair<ImageID, string>(DSC_9744, "../../resources/init_texture/DSC_9744_Keypoints.JPG"));
+        imageLocation.insert(pair<ImageID, string>(DSC_9745, "../../resources/init_texture/DSC_9745_Keypoints.JPG"));
+        imageLocation.insert(pair<ImageID, string>(DSC_9746, "../../resources/init_texture/DSC_9746_Keypoints.JPG"));
+        imageLocation.insert(pair<ImageID, string>(DSC_9747, "../../resources/init_texture/DSC_9747_Keypoints.JPG"));
+        imageLocation.insert(pair<ImageID, string>(DSC_9748, "../../resources/init_texture/DSC_9748_Keypoints.JPG"));
+        imageLocation.insert(pair<ImageID, string>(DSC_9749, "../../resources/init_texture/DSC_9749_Keypoints.JPG"));
+        imageLocation.insert(pair<ImageID, string>(DSC_9750, "../../resources/init_texture/DSC_9750_Keypoints.JPG"));
+
+        return imageLocation;
+    } 
+
+    map<ImageID, string> matlabWriteLocationTask1b() 
+    {
+        map<ImageID, string> imageLocation;
+        
+        imageLocation.insert(pair<ImageID, string>(DSC_9743, "../../resources/init_texture/matlab/task1b/DSC_9743_Keypoints.txt"));
+        imageLocation.insert(pair<ImageID, string>(DSC_9744, "../../resources/init_texture/matlab/task1b/DSC_9744_Keypoints.txt"));
+        imageLocation.insert(pair<ImageID, string>(DSC_9745, "../../resources/init_texture/matlab/task1b/DSC_9745_Keypoints.txt"));
+        imageLocation.insert(pair<ImageID, string>(DSC_9746, "../../resources/init_texture/matlab/task1b/DSC_9746_Keypoints.txt"));
+        imageLocation.insert(pair<ImageID, string>(DSC_9747, "../../resources/init_texture/matlab/task1b/DSC_9747_Keypoints.txt"));
+        imageLocation.insert(pair<ImageID, string>(DSC_9748, "../../resources/init_texture/matlab/task1b/DSC_9748_Keypoints.txt"));
+        imageLocation.insert(pair<ImageID, string>(DSC_9749, "../../resources/init_texture/matlab/task1b/DSC_9749_Keypoints.txt"));
+        imageLocation.insert(pair<ImageID, string>(DSC_9750, "../../resources/init_texture/matlab/task1b/DSC_9750_Keypoints.txt"));
+
+        return imageLocation;
+    } 
+
 } // namespace input

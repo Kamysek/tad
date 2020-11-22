@@ -11,6 +11,10 @@ namespace input {
 
     std::map<global::ImageID, std::string> imageLocation(); 
 
+    std::map<global::ImageID, std::string> imageWriteLocation(); 
+
+    std::map<global::ImageID, std::string> matlabWriteLocationTask1b(); 
+
     std::map<global::TeaBoxCorner, cv::Point3d> teabox3DCoordinates();
     
 } // namespace input

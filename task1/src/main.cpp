@@ -8,6 +8,8 @@
 #include <vector>
 #include <string>
 #include <iostream>
+#include <fstream> 
+#include <iostream>
 #include <filesystem>
 #include <opencv2/opencv.hpp>
 
@@ -151,6 +153,8 @@ void task1b(map<ImageID, map<string, Mat>> rotationTranslationDirectionInformati
     // Load 3D teabox coordinates, image location and provided 2D image coordinates
     map<TeaBoxCorner, Point3d> tb3DCoordinates = input::teabox3DCoordinates();
     map<ImageID, string> imgLocation = input::imageLocation();
+    map<ImageID, string> imgWriteLocation = input::imageLocation();
+    map<ImageID, string> imgWriteMatlabLocation = input::matlabWriteLocationTask1b();
     
     // Cycle through images
     for ( int iidInt = DSC_9743; iidInt != LASTIID; iidInt++ )
@@ -176,13 +180,19 @@ void task1b(map<ImageID, map<string, Mat>> rotationTranslationDirectionInformati
 
         // Create boundary box 
         intersection::AABBox box(intersection::Vec3f(0,0,0), intersection::Vec3f(0.165, 0.063, 0.093)); 
-        // Store box keypoints
+        
+        // Store box keypoints and intersection Points
         std::vector<KeyPoint> tmpKeypoints;
+        std::vector<intersection::Vec3f> intersectionPoints;
+        
+        // Create output file for matlab code
+        std::ofstream outfile (imgWriteMatlabLocation[iid]);
+
         // Cycle through all keypoints to check if they intersect with the box
         for(std::vector<KeyPoint>::iterator iter = keypoints.begin(); iter != keypoints.end(); ++iter) {
             // Map 2D points to 3D rays
             Point2d pointOnTeabox = Point2d((*iter).pt.x, (*iter).pt.y);
-            pair<intersection::Vec3f,intersection::Vec3f> calculatedRay = convert2DPointTo3DRay(rotationTranslationDirection, pointOnTeabox);
+            pair<intersection::Vec3f, intersection::Vec3f> calculatedRay = convert2DPointTo3DRay(rotationTranslationDirection, pointOnTeabox);
 
             // Calculate intersection with box
             intersection::Ray ray(calculatedRay.first, calculatedRay.second.normalize()); 
@@ -190,18 +200,24 @@ void task1b(map<ImageID, map<string, Mat>> rotationTranslationDirectionInformati
             if (box.intersect(ray, t)) { 
                 // Store intersection point
                 tmpKeypoints.push_back(*iter);  
+                
+                // Get intersection point
+                intersection::Vec3f intersection = ray.orig + ray.dir * t; 
+                intersectionPoints.push_back(intersection);
+
+                // Write matlab code to file
+                outfile << "scatter3("+ std::to_string(intersection.x) + ", " + std::to_string(intersection.y) + ", "+ std::to_string(intersection.z) +");" << endl;
+                outfile << "hold on" << endl;
             } 
         }
             
         // Draw keypoints on picture
         Mat output;
         drawKeypoints(img, tmpKeypoints, output);
-        
-        // Show detected keypoints
-        imshow("Keypoints 1", output);
-       
-        waitKey(0);
 
+        // Write detected keypoints to image 
+        imwrite(imgWriteLocation[iid], output);
+       
     }
 }
 
