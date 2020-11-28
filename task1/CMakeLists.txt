@@ -1,6 +1,6 @@
 # minimum cmake version
 cmake_minimum_required(VERSION 3.17.0)
-project(Task1 VERSION 0.1.0)
+project(Tasks VERSION 0.1.0)
 
 # set cpp version
 set(CMAKE_CXX_STANDARD 17)

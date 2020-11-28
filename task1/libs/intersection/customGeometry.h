@@ -28,7 +28,9 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //[/ignore]
-#pragma once
+#ifndef __INTERSECTION_H__
+#define __INTERSECTION_H__
+
 #include <cstdlib>
 #include <cstdio>
 #include <iostream>
@@ -535,3 +537,5 @@ int main(int argc, char **argv)
 #endif
 
 }
+
+#endif

@@ -25,7 +25,8 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //[/ignore]
-#pragma once
+#ifndef __RAYBOX_H__
+#define __RAYBOX_H__
 
 #include "customGeometry.h"
 #include <cstdlib>
@@ -97,3 +98,5 @@ public:
 };
 
 }
+
+#endif

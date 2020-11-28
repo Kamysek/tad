@@ -9,13 +9,14 @@ target_include_directories(OpenCV INTERFACE ${OpenCV_INCLUDE_DIRS})
 target_link_libraries(OpenCV INTERFACE  ${OpenCV_LIBS})
 
 # executable
-add_executable(Task1 main.cpp)
+add_executable(Tasks main.cpp)
 
 # subdirectories
 add_subdirectory(utility)
 add_subdirectory(input)
 add_subdirectory(task1a)
 add_subdirectory(task1b)
+add_subdirectory(task2)
 
 # link libraries
-target_link_libraries(Task1 PRIVATE OpenCV utility input intersection task1a task1b)
+target_link_libraries(Tasks PRIVATE OpenCV intersection utility input task1a task1b task2)

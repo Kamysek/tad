@@ -1,18 +1,18 @@
 #include "readInput.h"
 #include "../utility/utility.h"
 #include <map>
-#include <string>
-#include <utility>
 #include <opencv2/opencv.hpp>
+#include <string>
 
 using namespace utility;
 using namespace std;
 using namespace cv;
 
-namespace input {
-   
+namespace input
+{
+
     // Stores all the provided coordinates of a corner for each imageid
-    map<ImageID, map<TeaBoxCorner, Point2d>> image2DCoordinates() 
+    map<ImageID, map<TeaBoxCorner, Point2d>> image2DCoordinates()
     {
         map<ImageID, map<TeaBoxCorner, Point2d>> image2DCoordinates;
 
@@ -24,7 +24,7 @@ namespace input {
         dsc_9743_Corners.insert(pair(THREE, Point2d(1342, 1134)));
         dsc_9743_Corners.insert(pair(SIX, Point2d(2279, 1589)));
         dsc_9743_Corners.insert(pair(SEVEN, Point2d(1372, 1619)));
-        
+
         image2DCoordinates.insert(pair(DSC_9743, dsc_9743_Corners));
 
         // DSC_9744
@@ -36,7 +36,7 @@ namespace input {
         dsc_9744_Corners.insert(pair(FIVE, Point2d(2175, 1618)));
         dsc_9744_Corners.insert(pair(SIX, Point2d(1912, 1734)));
         dsc_9744_Corners.insert(pair(SEVEN, Point2d(1419, 1408)));
-        
+
         image2DCoordinates.insert(pair(DSC_9744, dsc_9744_Corners));
 
         // DSC_9745
@@ -47,7 +47,7 @@ namespace input {
         dsc_9745_Corners.insert(pair(THREE, Point2d(1534, 991)));
         dsc_9745_Corners.insert(pair(FIVE, Point2d(1872, 1782)));
         dsc_9745_Corners.insert(pair(SIX, Point2d(1500, 1791)));
-        
+
         image2DCoordinates.insert(pair(DSC_9745, dsc_9745_Corners));
 
         // DSC_9746
@@ -59,7 +59,7 @@ namespace input {
         dsc_9746_Corners.insert(pair(FOUR, Point2d(2086, 1471)));
         dsc_9746_Corners.insert(pair(FIVE, Point2d(1512, 1764)));
         dsc_9746_Corners.insert(pair(SIX, Point2d(1274, 1643)));
-        
+
         image2DCoordinates.insert(pair(DSC_9746, dsc_9746_Corners));
 
         // DSC_9747
@@ -70,42 +70,42 @@ namespace input {
         dsc_9747_Corners.insert(pair(THREE, Point2d(2281, 1054)));
         dsc_9747_Corners.insert(pair(FOUR, Point2d(2296, 1652)));
         dsc_9747_Corners.insert(pair(FIVE, Point2d(1377, 1644)));
-        
+
         image2DCoordinates.insert(pair(DSC_9747, dsc_9747_Corners));
 
         // DSC_9748
         map<TeaBoxCorner, Point2d> dsc_9748_Corners;
-        dsc_9748_Corners.insert(pair(ZERO, Point2d(1872, 1354)));
-        dsc_9748_Corners.insert(pair(ONE, Point2d(1444, 1116)));
-        dsc_9748_Corners.insert(pair(TWO, Point2d(1710, 1060)));
-        dsc_9748_Corners.insert(pair(THREE, Point2d(2178, 1280)));
-        dsc_9748_Corners.insert(pair(FOUR, Point2d(1993, 1847)));
-        dsc_9748_Corners.insert(pair(FIVE, Point2d(1376, 1523)));
-        dsc_9748_Corners.insert(pair(SEVEN, Point2d(2169, 1752)));
-        
+        dsc_9748_Corners.insert(pair(ZERO, Point2d(1748, 1180)));
+        dsc_9748_Corners.insert(pair(ONE, Point2d(1317, 942)));
+        dsc_9748_Corners.insert(pair(TWO, Point2d(1587, 885)));
+        dsc_9748_Corners.insert(pair(THREE, Point2d(2056, 1106)));
+        dsc_9748_Corners.insert(pair(FOUR, Point2d(1761, 1666)));
+        dsc_9748_Corners.insert(pair(FIVE, Point2d(1351, 1349)));
+        dsc_9748_Corners.insert(pair(SEVEN, Point2d(2048, 1575)));
+
         image2DCoordinates.insert(pair(DSC_9748, dsc_9748_Corners));
 
         // DSC_9749
         map<TeaBoxCorner, Point2d> dsc_9749_Corners;
-        dsc_9749_Corners.insert(pair(ZERO, Point2d(2018, 1550)));
-        dsc_9749_Corners.insert(pair(ONE, Point2d(2063, 1274)));
-        dsc_9749_Corners.insert(pair(TWO, Point2d(2355, 1274)));
-        dsc_9749_Corners.insert(pair(THREE, Point2d(2406, 1552)));
-        dsc_9749_Corners.insert(pair(FOUR, Point2d(2029, 2044)));
-        dsc_9749_Corners.insert(pair(SEVEN, Point2d(2388, 2041)));
-        
+        dsc_9749_Corners.insert(pair(ZERO, Point2d(1597, 1189)));
+        dsc_9749_Corners.insert(pair(ONE, Point2d(1645, 915)));
+        dsc_9749_Corners.insert(pair(TWO, Point2d(1938, 909)));
+        dsc_9749_Corners.insert(pair(THREE, Point2d(1981, 1189)));
+        dsc_9749_Corners.insert(pair(FOUR, Point2d(1616, 1678)));
+        dsc_9749_Corners.insert(pair(SEVEN, Point2d(1974, 1681)));
+
         image2DCoordinates.insert(pair(DSC_9749, dsc_9749_Corners));
 
         // DSC_9750
         map<TeaBoxCorner, Point2d> dsc_9750_Corners;
-        dsc_9750_Corners.insert(pair(ZERO, Point2d(1323, 1468)));
-        dsc_9750_Corners.insert(pair(ONE, Point2d(1919, 1291)));
-        dsc_9750_Corners.insert(pair(TWO, Point2d(2159, 1351)));
-        dsc_9750_Corners.insert(pair(THREE, Point2d(1571, 1555)));
-        dsc_9750_Corners.insert(pair(FOUR, Point2d(1333, 1932)));
-        dsc_9750_Corners.insert(pair(SIX, Point2d(2132, 1770)));
-        dsc_9750_Corners.insert(pair(SEVEN, Point2d(1571, 2053)));
-        
+        dsc_9750_Corners.insert(pair(ZERO, Point2d(1458, 1141)));
+        dsc_9750_Corners.insert(pair(ONE, Point2d(2054, 970)));
+        dsc_9750_Corners.insert(pair(TWO, Point2d(2300, 1031)));
+        dsc_9750_Corners.insert(pair(THREE, Point2d(1710, 1234)));
+        dsc_9750_Corners.insert(pair(FOUR, Point2d(1470, 1608)));
+        dsc_9750_Corners.insert(pair(SIX, Point2d(2271, 1449)));
+        dsc_9750_Corners.insert(pair(SEVEN, Point2d(1703, 1732)));
+
         image2DCoordinates.insert(pair(DSC_9750, dsc_9750_Corners));
 
         return image2DCoordinates;
@@ -127,10 +127,10 @@ namespace input {
         return teabox3DCoordinates;
     }
 
-    map<ImageID, string> imageLocation() 
+    map<ImageID, string> imageLocation()
     {
         map<ImageID, string> imageLocation;
-        
+
         imageLocation.insert(pair<ImageID, string>(DSC_9743, "../../resources/init_texture/DSC_9743.JPG"));
         imageLocation.insert(pair<ImageID, string>(DSC_9744, "../../resources/init_texture/DSC_9744.JPG"));
         imageLocation.insert(pair<ImageID, string>(DSC_9745, "../../resources/init_texture/DSC_9745.JPG"));
@@ -141,12 +141,12 @@ namespace input {
         imageLocation.insert(pair<ImageID, string>(DSC_9750, "../../resources/init_texture/DSC_9750.JPG"));
 
         return imageLocation;
-    } 
+    }
 
-    map<ImageID, string> imageWriteLocation() 
+    map<ImageID, string> imageWriteLocation()
     {
         map<ImageID, string> imageLocation;
-        
+
         imageLocation.insert(pair<ImageID, string>(DSC_9743, "../../resources/init_texture/DSC_9743_Keypoints.JPG"));
         imageLocation.insert(pair<ImageID, string>(DSC_9744, "../../resources/init_texture/DSC_9744_Keypoints.JPG"));
         imageLocation.insert(pair<ImageID, string>(DSC_9745, "../../resources/init_texture/DSC_9745_Keypoints.JPG"));
@@ -157,12 +157,12 @@ namespace input {
         imageLocation.insert(pair<ImageID, string>(DSC_9750, "../../resources/init_texture/DSC_9750_Keypoints.JPG"));
 
         return imageLocation;
-    } 
+    }
 
-    map<ImageID, string> matlabWriteLocationTask1a() 
+    map<ImageID, string> matlabWriteLocationTask1a()
     {
         map<ImageID, string> matlabWriteLocation;
-        
+
         matlabWriteLocation.insert(pair<ImageID, string>(DSC_9743, "../../resources/matlab/task1a/DSC_9743_Keypoints.m"));
         matlabWriteLocation.insert(pair<ImageID, string>(DSC_9744, "../../resources/matlab/task1a/DSC_9744_Keypoints.m"));
         matlabWriteLocation.insert(pair<ImageID, string>(DSC_9745, "../../resources/matlab/task1a/DSC_9745_Keypoints.m"));
@@ -173,12 +173,12 @@ namespace input {
         matlabWriteLocation.insert(pair<ImageID, string>(DSC_9750, "../../resources/matlab/task1a/DSC_9750_Keypoints.m"));
 
         return matlabWriteLocation;
-    } 
+    }
 
-    map<ImageID, string> matlabWriteLocationTask1b() 
+    map<ImageID, string> matlabWriteLocationTask1b()
     {
         map<ImageID, string> matlabWriteLocation;
-        
+
         matlabWriteLocation.insert(pair<ImageID, string>(DSC_9743, "../../resources/matlab/task1b/DSC_9743_Keypoints.m"));
         matlabWriteLocation.insert(pair<ImageID, string>(DSC_9744, "../../resources/matlab/task1b/DSC_9744_Keypoints.m"));
         matlabWriteLocation.insert(pair<ImageID, string>(DSC_9745, "../../resources/matlab/task1b/DSC_9745_Keypoints.m"));
@@ -189,6 +189,70 @@ namespace input {
         matlabWriteLocation.insert(pair<ImageID, string>(DSC_9750, "../../resources/matlab/task1b/DSC_9750_Keypoints.m"));
 
         return matlabWriteLocation;
-    } 
+    }
+
+    map<ImageIDTask2, string> imageLocationTask2()
+    {
+        map<ImageIDTask2, string> imageLocation;
+
+        imageLocation.insert(pair<ImageIDTask2, string>(DSC_9751, "../../resources/detection/DSC_9751.JPG"));
+        imageLocation.insert(pair<ImageIDTask2, string>(DSC_9752, "../../resources/detection/DSC_9752.JPG"));
+        imageLocation.insert(pair<ImageIDTask2, string>(DSC_9753, "../../resources/detection/DSC_9753.JPG"));
+        imageLocation.insert(pair<ImageIDTask2, string>(DSC_9754, "../../resources/detection/DSC_9754.JPG"));
+        imageLocation.insert(pair<ImageIDTask2, string>(DSC_9755, "../../resources/detection/DSC_9755.JPG"));
+        imageLocation.insert(pair<ImageIDTask2, string>(DSC_9756, "../../resources/detection/DSC_9756.JPG"));
+        imageLocation.insert(pair<ImageIDTask2, string>(DSC_9757, "../../resources/detection/DSC_9757.JPG"));
+        imageLocation.insert(pair<ImageIDTask2, string>(DSC_9758, "../../resources/detection/DSC_9758.JPG"));
+        imageLocation.insert(pair<ImageIDTask2, string>(DSC_9759, "../../resources/detection/DSC_9759.JPG"));
+        imageLocation.insert(pair<ImageIDTask2, string>(DSC_9760, "../../resources/detection/DSC_9760.JPG"));
+        imageLocation.insert(pair<ImageIDTask2, string>(DSC_9761, "../../resources/detection/DSC_9761.JPG"));
+        imageLocation.insert(pair<ImageIDTask2, string>(DSC_9762, "../../resources/detection/DSC_9762.JPG"));
+        imageLocation.insert(pair<ImageIDTask2, string>(DSC_9763, "../../resources/detection/DSC_9763.JPG"));
+        imageLocation.insert(pair<ImageIDTask2, string>(DSC_9764, "../../resources/detection/DSC_9764.JPG"));
+        imageLocation.insert(pair<ImageIDTask2, string>(DSC_9765, "../../resources/detection/DSC_9765.JPG"));
+        imageLocation.insert(pair<ImageIDTask2, string>(DSC_9766, "../../resources/detection/DSC_9766.JPG"));
+        imageLocation.insert(pair<ImageIDTask2, string>(DSC_9767, "../../resources/detection/DSC_9767.JPG"));
+        imageLocation.insert(pair<ImageIDTask2, string>(DSC_9768, "../../resources/detection/DSC_9768.JPG"));
+        imageLocation.insert(pair<ImageIDTask2, string>(DSC_9769, "../../resources/detection/DSC_9769.JPG"));
+        imageLocation.insert(pair<ImageIDTask2, string>(DSC_9770, "../../resources/detection/DSC_9770.JPG"));
+        imageLocation.insert(pair<ImageIDTask2, string>(DSC_9771, "../../resources/detection/DSC_9771.JPG"));
+        imageLocation.insert(pair<ImageIDTask2, string>(DSC_9772, "../../resources/detection/DSC_9772.JPG"));
+        imageLocation.insert(pair<ImageIDTask2, string>(DSC_9773, "../../resources/detection/DSC_9773.JPG"));
+        imageLocation.insert(pair<ImageIDTask2, string>(DSC_9774, "../../resources/detection/DSC_9774.JPG"));
+
+        return imageLocation;
+    }
+
+    map<ImageIDTask2, string> imageWriteLocationTask2()
+    {
+        map<ImageIDTask2, string> imageLocation;
+
+        imageLocation.insert(pair<ImageIDTask2, string>(DSC_9751, "../../resources/detection/DSC_9751_Keypoints.JPG"));
+        imageLocation.insert(pair<ImageIDTask2, string>(DSC_9752, "../../resources/detection/DSC_9752_Keypoints.JPG"));
+        imageLocation.insert(pair<ImageIDTask2, string>(DSC_9753, "../../resources/detection/DSC_9753_Keypoints.JPG"));
+        imageLocation.insert(pair<ImageIDTask2, string>(DSC_9754, "../../resources/detection/DSC_9754_Keypoints.JPG"));
+        imageLocation.insert(pair<ImageIDTask2, string>(DSC_9755, "../../resources/detection/DSC_9755_Keypoints.JPG"));
+        imageLocation.insert(pair<ImageIDTask2, string>(DSC_9756, "../../resources/detection/DSC_9756_Keypoints.JPG"));
+        imageLocation.insert(pair<ImageIDTask2, string>(DSC_9757, "../../resources/detection/DSC_9757_Keypoints.JPG"));
+        imageLocation.insert(pair<ImageIDTask2, string>(DSC_9758, "../../resources/detection/DSC_9758_Keypoints.JPG"));
+        imageLocation.insert(pair<ImageIDTask2, string>(DSC_9759, "../../resources/detection/DSC_9759_Keypoints.JPG"));
+        imageLocation.insert(pair<ImageIDTask2, string>(DSC_9760, "../../resources/detection/DSC_9760_Keypoints.JPG"));
+        imageLocation.insert(pair<ImageIDTask2, string>(DSC_9761, "../../resources/detection/DSC_9761_Keypoints.JPG"));
+        imageLocation.insert(pair<ImageIDTask2, string>(DSC_9762, "../../resources/detection/DSC_9762_Keypoints.JPG"));
+        imageLocation.insert(pair<ImageIDTask2, string>(DSC_9763, "../../resources/detection/DSC_9763_Keypoints.JPG"));
+        imageLocation.insert(pair<ImageIDTask2, string>(DSC_9764, "../../resources/detection/DSC_9764_Keypoints.JPG"));
+        imageLocation.insert(pair<ImageIDTask2, string>(DSC_9765, "../../resources/detection/DSC_9765_Keypoints.JPG"));
+        imageLocation.insert(pair<ImageIDTask2, string>(DSC_9766, "../../resources/detection/DSC_9766_Keypoints.JPG"));
+        imageLocation.insert(pair<ImageIDTask2, string>(DSC_9767, "../../resources/detection/DSC_9767_Keypoints.JPG"));
+        imageLocation.insert(pair<ImageIDTask2, string>(DSC_9768, "../../resources/detection/DSC_9768_Keypoints.JPG"));
+        imageLocation.insert(pair<ImageIDTask2, string>(DSC_9769, "../../resources/detection/DSC_9769_Keypoints.JPG"));
+        imageLocation.insert(pair<ImageIDTask2, string>(DSC_9770, "../../resources/detection/DSC_9770_Keypoints.JPG"));
+        imageLocation.insert(pair<ImageIDTask2, string>(DSC_9771, "../../resources/detection/DSC_9771_Keypoints.JPG"));
+        imageLocation.insert(pair<ImageIDTask2, string>(DSC_9772, "../../resources/detection/DSC_9772_Keypoints.JPG"));
+        imageLocation.insert(pair<ImageIDTask2, string>(DSC_9773, "../../resources/detection/DSC_9773_Keypoints.JPG"));
+        imageLocation.insert(pair<ImageIDTask2, string>(DSC_9774, "../../resources/detection/DSC_9774_Keypoints.JPG"));
+
+        return imageLocation;
+    }
 
 } // namespace input
