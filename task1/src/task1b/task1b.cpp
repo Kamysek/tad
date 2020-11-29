@@ -84,7 +84,7 @@ namespace task1b
 
             allDescriptors.push_back(descriptors);
             // copy retrieved keypoints to storage
-            copy(allKeypoints.begin(), allKeypoints.end(), back_inserter(keypoints));
+            copy(keypoints.begin(), keypoints.end(), back_inserter(allKeypoints));
 
             // Create boundary box
             intersection::AABBox box(intersection::Vec3f(0, 0, 0), intersection::Vec3f(0.165, 0.063, 0.093));
@@ -127,7 +127,7 @@ namespace task1b
             }
 
             // copy intersected points to storage
-            copy(all3DModelPoints.begin(), all3DModelPoints.end(), back_inserter(intersectionPoints));
+            copy(intersectionPoints.begin(), intersectionPoints.end(), back_inserter(all3DModelPoints));
 
             // Close file
             file << "hold all" << endl;
