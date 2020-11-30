@@ -89,13 +89,7 @@ namespace task1a
 
             // Calculate camera direction
             Mat vector = (Mat_<double>(3, 1) << 0, 0, 1);
-            cout << vector.size << endl;
             Mat cameraDirection = rotationMatrix.t() * vector;
-
-            // Print output
-            printMat("Rotation Matrix", rotationMatrix);
-            printMat("Camera Position", translationVector);
-            printMat("Camera Direction", rotationMatrix);
 
             // Store rotation matrix, translation (camera position), camera direction
             map<string, Mat> storeMatTransDir;
@@ -139,6 +133,7 @@ namespace task1a
             file << "\n"
                  << endl;
             file.close();
+
         }
 
         // Create final matlab file for task 1

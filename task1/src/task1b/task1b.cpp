@@ -82,15 +82,12 @@ namespace task1b
             Mat descriptors;
             detector->detectAndCompute(img, noArray(), keypoints, descriptors);
 
-            allDescriptors.push_back(descriptors);
-            // copy retrieved keypoints to storage
-            copy(keypoints.begin(), keypoints.end(), back_inserter(allKeypoints));
-
             // Create boundary box
             intersection::AABBox box(intersection::Vec3f(0, 0, 0), intersection::Vec3f(0.165, 0.063, 0.093));
 
             // Store box keypoints and intersection Points
             vector<KeyPoint> tmpKeypoints;
+            Mat tmpDescriptor;
             vector<intersection::Vec3f> intersectionPoints;
 
             // Create output file for matlab code
@@ -114,8 +111,13 @@ namespace task1b
                 float t;
                 if (box.intersect(ray, t))
                 {
-                    // Store intersection point
+                    // Store intersection keypoint
                     tmpKeypoints.push_back(*iter);
+
+                    // Extract descriptor for intersection point
+                    int iteratorIndex = iter - keypoints.begin();
+                    Mat intersectionDescriptor = descriptors.row(iteratorIndex);
+                    tmpDescriptor.push_back(intersectionDescriptor);
 
                     // Get intersection point
                     intersection::Vec3f intersection = ray.orig + ray.dir * t;
@@ -126,19 +128,20 @@ namespace task1b
                 }
             }
 
-            // copy intersected points to storage
-            copy(intersectionPoints.begin(), intersectionPoints.end(), back_inserter(all3DModelPoints));
-
             // Close file
             file << "hold all" << endl;
             file.close();
 
-            // Draw keypoints on picture
-            Mat output;
-            drawKeypoints(img, tmpKeypoints, output);
+            // copy intersected points, keypoints and descriptors to storage
+            all3DModelPoints.insert(all3DModelPoints.end(), intersectionPoints.begin(), intersectionPoints.end());
+            allKeypoints.insert(allKeypoints.end(), tmpKeypoints.begin(), tmpKeypoints.end());
+            allDescriptors.push_back(tmpDescriptor);
 
-            // Write detected keypoints to image
+            // Draw keypoints on picture and write detected keypoints to image
+            Mat output;
+            drawKeypoints(img, tmpKeypoints, output);            
             imwrite(imgWriteLocation[iid], output);
+
         }
 
         // Create final matlab file for task 1b

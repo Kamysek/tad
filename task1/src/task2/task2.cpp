@@ -1,7 +1,7 @@
 #include "../input/readInput.h"
-#include "math.h"
 #include "../utility/utility.h"
 #include "customGeometry.h"
+#include "math.h"
 #include <filesystem>
 #include <fstream>
 #include <iostream>
@@ -55,85 +55,181 @@ namespace task2
 
             // Extract keypoints and descriptors of "new image" using SIFT Detector
             Ptr<SIFT> detector = SIFT::create();
-            vector<KeyPoint> keypoints;
-            Mat descriptors;
-            detector->detectAndCompute(img, noArray(), keypoints, descriptors);
+            vector<KeyPoint> keypointsNewImage;
+            Mat descriptorsNewImage;
+            detector->detectAndCompute(img, noArray(), keypointsNewImage, descriptorsNewImage);
 
-            // Setup descriptor matcher
-            Ptr<DescriptorMatcher> matcher = DescriptorMatcher::create(DescriptorMatcher::BRUTEFORCE);
+            //-- Step 2: Matching descriptor vectors with a FLANN based matcher
+            //Since SURF is a floating-point descriptor NORM_L2 is used
+            Ptr<DescriptorMatcher> matcher = DescriptorMatcher::create(DescriptorMatcher::FLANNBASED);
+            std::vector< std::vector<DMatch> > knn_matches;
+            matcher->knnMatch( descriptorsNewImage, storage.descriptors, knn_matches, 2 );
+            //-- Filter matches using the Lowe's ratio test
+            const float ratio_thresh = 0.7f;
+            std::vector<DMatch> good_matches;
+            for (size_t i = 0; i < knn_matches.size(); i++)
+            {
+                if (knn_matches[i][0].distance < ratio_thresh * knn_matches[i][1].distance)
+                {
+                    good_matches.push_back(knn_matches[i][0]);
+                }
+            }
 
-            matcher->add(storage.descriptors);
-            matcher->train();
+            //BFMatcher matcher(NORM_L2, true);
+            //Ptr<DescriptorMatcher> matcher = DescriptorMatcher::create(DescriptorMatcher::FLANNBASED);
+            //std::vector< std::vector<DMatch> > knn_matches;
 
-            // match new descriptors with descriptors from original images
+
+            // vector containing all descriptors from training images
             vector<DMatch> matches;
-            matcher->match(descriptors, matches);
+
+            Mat newDescriptor;
+            for (unsigned int i = 0; i < storage.descriptors.size(); ++i)
+            {
+                vconcat(storage.descriptors.at(i), newDescriptor);
+            }
+
+            newDescriptor.convertTo(newDescriptor, CV_32F);
+
+            //matcher -> knnMatch(descriptorsNewImage, newDescriptor, knn_matches, 2);
+            //matcher.match(descriptorsNewImage, newDescriptor, matches);
+
+            // const int GOOD_PTS_MAX = 50;
+            // const float GOOD_PORTION = 0.2f;
+
+            // std::sort(matches.begin(), matches.end());
+            // std::vector< DMatch > good_matches;
+            // double minDist = matches.front().distance;
+            // double maxDist = matches.back().distance;
+
+            // const int ptsPairs = std::min(GOOD_PTS_MAX, (int)(matches.size() * GOOD_PORTION));
+            // for( int i = 0; i < ptsPairs; i++ )
+            // {
+            //     good_matches.push_back( matches[i] );
+            // }
+
+            // const float ratio_thresh = 0.75f;
+            // std::vector<DMatch> good_matches;
+            // for (size_t i = 0; i < knn_matches.size(); i++)
+            // {
+            //     if (knn_matches[i][0].distance < ratio_thresh * knn_matches[i][1].distance)
+            //     {
+            //         good_matches.push_back(knn_matches[i][0]);
+            //     }
+            // }
+
+            Mat img_matches;
+            Mat im2 = imread("../../resources/init_texture/DSC_9743.JPG");
+            drawMatches( img, keypointsNewImage, im2, storage.keypoints, good_matches, img_matches, Scalar::all(-1), Scalar::all(-1), std::vector<char>(), DrawMatchesFlags::NOT_DRAW_SINGLE_POINTS );
+            //-- Show detected matches
+            imshow("Good Matches", img_matches );
+            waitKey();
 
             // Find out 2D / 3D correspondences
             vector<Point3f> matches3Dmodel;
             vector<Point2f> matches2Dimage;
-            for (unsigned int i = 0; i < matches.size(); ++i)
+            for (unsigned int i = 0; i < good_matches.size(); ++i)
             {
-                intersection::Vec3f vectorWith3DPoint = storage.intersectionPoints[matches[i].trainIdx];
-                //Point3f point3d intersection:: = storage.intersectionPoints[matches[i].trainIdx];
-                Point2f point2d = keypoints[matches[i].queryIdx].pt;
+                // vector containing all 3d intersection points from training images
+                intersection::Vec3f vectorWith3DPoint = storage.intersectionPoints[good_matches[i].trainIdx];
+                Point2f point2d = keypointsNewImage[good_matches[i].queryIdx].pt;
                 matches3Dmodel.push_back(Point3f(vectorWith3DPoint.x, vectorWith3DPoint.y, vectorWith3DPoint.z));
                 matches2Dimage.push_back(point2d);
             }
-
-            // // Draw matches
-            // Mat drawImg;
-            // Mat loadimage = imread("../../resources/init_texture/DSC_9743.JPG");
-            // drawMatches(img, keypoints, loadimage, storage.keypoints, matches, drawImg);
-            // imshow("Show corners", drawImg);
-
-            // waitKey(0);
 
             // Prepare for solve pnp
             Mat distortionCoefficient = Mat::zeros(4, 1, CV_64FC1);
             Mat rotationVector = Mat::zeros(3, 1, CV_64FC1);
             Mat translationVector = Mat::zeros(3, 1, CV_64FC1);
+            
 
-            double error = 1000000;
-            int finali;
-            int finalj;
+            // How I calculated the optimal values
+            // double error = 100000;
+            // int finali;
+            // int finalj;
 
-            // calculate lowest distance
-            // for (unsigned int j = 10; j < 200; ++j)
+            // // calculate lowest distance
+            // for (unsigned int j = 10; j < 400; ++j)
             // {
-            //     for (unsigned int i = 5; i < 150; ++i)
-            //     { 
-            //         solvePnPRansac(matches3Dmodel, matches2Dimage, intrinsicCameraMatrix, distortionCoefficient, rotationVector, translationVector, false, j, i);
+            //     for (unsigned int i = 5; i < 100; ++i)
+            //     {
+            //         cout << j << endl;
+            //         cout << i << endl;
+            //         // solvePnPRansac(matches3Dmodel, matches2Dimage, intrinsicCameraMatrix, distortionCoefficient, rotationVector, translationVector, true, j, i, 0.99, noArray(), SOLVEPNP_P3P);
+
+            //         // // Obtrain rotation matrix through rodrigues
+            //         // Mat rotationMatrix;
+            //         // Rodrigues(rotationVector, rotationMatrix);
+
+            //         // // Get correct order of image points
+            //         // vector<Point2d> imagePoints;
+            //         // for (unsigned int i = 0; i < tbc3DVect.size(); ++i)
+            //         // {
+            //         //     vector<Point2d> outputPoint;
+            //         //     vector<Point3d> inputPoint;
+            //         //     inputPoint.push_back(tbc3DVect.at(i));
+
+            //         //     // Project 3d teabox coordinates to 2d image coordinates
+            //         //     projectPoints(inputPoint, rotationVector, translationVector, intrinsicCameraMatrix, distortionCoefficient, outputPoint);
+
+            //         //     imagePoints.push_back(outputPoint.at(0));
+            //         // }
+
+            //         // cout << "ImagePoints" << endl;
+            //         // cout << imagePoints << endl;
+
+            //         // //Draw lines
+            //         // line(img, imagePoints.at(0), imagePoints.at(1), Scalar(255, 0, 0), 3);
+            //         // line(img, imagePoints.at(0), imagePoints.at(3), Scalar(255, 0, 0), 3);
+            //         // line(img, imagePoints.at(0), imagePoints.at(4), Scalar(255, 0, 0), 3);
+
+            //         // line(img, imagePoints.at(1), imagePoints.at(2), Scalar(255, 0, 0), 3);
+            //         // line(img, imagePoints.at(1), imagePoints.at(5), Scalar(255, 0, 0), 3);
+
+            //         // line(img, imagePoints.at(2), imagePoints.at(3), Scalar(255, 0, 0), 3);
+            //         // line(img, imagePoints.at(2), imagePoints.at(6), Scalar(255, 0, 0), 3);
+
+            //         // line(img, imagePoints.at(3), imagePoints.at(7), Scalar(255, 0, 0), 3);
+
+            //         // line(img, imagePoints.at(4), imagePoints.at(5), Scalar(255, 0, 0), 3);
+            //         // line(img, imagePoints.at(4), imagePoints.at(7), Scalar(255, 0, 0), 3);
+
+            //         // line(img, imagePoints.at(5), imagePoints.at(6), Scalar(255, 0, 0), 3);
+
+            //         // line(img, imagePoints.at(6), imagePoints.at(7), Scalar(255, 0, 0), 3);
+
+            //         // imshow("Show corners", img);
+
+            //         // waitKey();
+                    
+            //         solvePnPRansac(matches3Dmodel, matches2Dimage, intrinsicCameraMatrix, distortionCoefficient, rotationVector, translationVector, true, j, i, 0.99, noArray(), SOLVEPNP_P3P);
 
             //         // Obtrain rotation matrix through rodrigues
             //         Mat rotationMatrix;
             //         Rodrigues(rotationVector, rotationMatrix);
 
-            //         printMat("RotationVector", rotationVector);
-
-            //         printMat("RotationMatrix", rotationMatrix);
-
-            //         // Calculate camera position
-            //         //translationVector = -rotationMatrix.t() * translationVector;
-            //         printMat("TranslationVector", translationVector);
-
+            //         // Get correct order of image points
             //         vector<Point2d> imagePoints;
             //         for (unsigned int i = 0; i < tbc3DVect.size(); ++i)
-            //         {    
+            //         {
             //             vector<Point2d> outputPoint;
-            //             vector<Point3d> inputPoint; 
+            //             vector<Point3d> inputPoint;
             //             inputPoint.push_back(tbc3DVect.at(i));
 
+            //             // Project 3d teabox coordinates to 2d image coordinates
             //             projectPoints(inputPoint, rotationVector, translationVector, intrinsicCameraMatrix, distortionCoefficient, outputPoint);
 
             //             imagePoints.push_back(outputPoint.at(0));
             //         }
 
             //         // calculate error
-            //         double tmpError = sqrt( pow(abs(1484.0 - imagePoints.at(0).x) + abs(1015.0 - imagePoints.at(0).y), 2) + 
+            //         double tmpError = sqrt( pow(abs(1484.0 - imagePoints.at(0).x) + abs(1015.0 - imagePoints.at(0).y), 2) +
             //                     pow(abs(2239.0 - imagePoints.at(1).x) + abs(1154.0 - imagePoints.at(1).y), 2) +
             //                     pow(abs(2132.0 - imagePoints.at(2).x) + abs(1264.0 - imagePoints.at(2).y), 2) +
-            //                     pow(abs(1333.0 - imagePoints.at(3).x) + abs(1104.0 - imagePoints.at(3).y), 2) );
+            //                     pow(abs(1333.0 - imagePoints.at(3).x) + abs(1104.0 - imagePoints.at(3).y), 2) +
+            //                     pow(abs(2211.0 - imagePoints.at(5).x) + abs(1555.0 - imagePoints.at(5).y), 2) +
+            //                     pow(abs(2105.0 - imagePoints.at(6).x) + abs(1718.0 - imagePoints.at(6).y), 2) +
+            //                     pow(abs(1347.0 - imagePoints.at(7).x) + abs(1520.0 - imagePoints.at(7).y), 2));
 
             //         if (tmpError < error){
             //             error = tmpError;
@@ -142,28 +238,24 @@ namespace task2
             //         }
             //     }
             // }
-
-            solvePnPRansac(matches3Dmodel, matches2Dimage, intrinsicCameraMatrix, distortionCoefficient, rotationVector, translationVector, false, 68, 0.5);
+     
+            // cout << finalj << endl;
+            // cout << finali << endl;
+            solvePnPRansac(matches3Dmodel, matches2Dimage, intrinsicCameraMatrix, distortionCoefficient, rotationVector, translationVector, true, 67, 10, 0.99, noArray(), SOLVEPNP_P3P);
 
             // Obtrain rotation matrix through rodrigues
             Mat rotationMatrix;
             Rodrigues(rotationVector, rotationMatrix);
 
-            printMat("RotationVector", rotationVector);
-
-            printMat("RotationMatrix", rotationMatrix);
-
-            // Calculate camera position
-            translationVector = -rotationMatrix.t() * translationVector;
-            printMat("TranslationVector", translationVector);
-
+            // Get correct order of image points
             vector<Point2d> imagePoints;
             for (unsigned int i = 0; i < tbc3DVect.size(); ++i)
-            {    
+            {
                 vector<Point2d> outputPoint;
-                vector<Point3d> inputPoint; 
+                vector<Point3d> inputPoint;
                 inputPoint.push_back(tbc3DVect.at(i));
 
+                // Project 3d teabox coordinates to 2d image coordinates
                 projectPoints(inputPoint, rotationVector, translationVector, intrinsicCameraMatrix, distortionCoefficient, outputPoint);
 
                 imagePoints.push_back(outputPoint.at(0));
@@ -172,28 +264,29 @@ namespace task2
             cout << "ImagePoints" << endl;
             cout << imagePoints << endl;
 
-            line(img, imagePoints.at(0), imagePoints.at(1), Scalar( 255, 0, 0 ), 3);
-            line(img, imagePoints.at(0), imagePoints.at(3), Scalar( 255, 0, 0 ), 3);
-            line(img, imagePoints.at(0), imagePoints.at(4), Scalar( 255, 0, 0 ), 3);
+            //Draw lines
+            line(img, imagePoints.at(0), imagePoints.at(1), Scalar(255, 0, 0), 3);
+            line(img, imagePoints.at(0), imagePoints.at(3), Scalar(255, 0, 0), 3);
+            line(img, imagePoints.at(0), imagePoints.at(4), Scalar(255, 0, 0), 3);
 
-            line(img, imagePoints.at(1), imagePoints.at(2), Scalar( 255, 0, 0 ), 3);
-            line(img, imagePoints.at(1), imagePoints.at(5), Scalar( 255, 0, 0 ), 3);
+            line(img, imagePoints.at(1), imagePoints.at(2), Scalar(255, 0, 0), 3);
+            line(img, imagePoints.at(1), imagePoints.at(5), Scalar(255, 0, 0), 3);
 
-            line(img, imagePoints.at(2), imagePoints.at(3), Scalar( 255, 0, 0 ), 3);
-            line(img, imagePoints.at(2), imagePoints.at(6), Scalar( 255, 0, 0 ), 3);
+            line(img, imagePoints.at(2), imagePoints.at(3), Scalar(255, 0, 0), 3);
+            line(img, imagePoints.at(2), imagePoints.at(6), Scalar(255, 0, 0), 3);
 
-            line(img, imagePoints.at(3), imagePoints.at(7), Scalar( 255, 0, 0 ), 3);
+            line(img, imagePoints.at(3), imagePoints.at(7), Scalar(255, 0, 0), 3);
 
-            line(img, imagePoints.at(4), imagePoints.at(5), Scalar( 255, 0, 0 ), 3);
-            line(img, imagePoints.at(4), imagePoints.at(7), Scalar( 255, 0, 0 ), 3);
+            line(img, imagePoints.at(4), imagePoints.at(5), Scalar(255, 0, 0), 3);
+            line(img, imagePoints.at(4), imagePoints.at(7), Scalar(255, 0, 0), 3);
 
-            line(img, imagePoints.at(5), imagePoints.at(6), Scalar( 255, 0, 0 ), 3);
+            line(img, imagePoints.at(5), imagePoints.at(6), Scalar(255, 0, 0), 3);
 
-            line(img, imagePoints.at(6), imagePoints.at(7), Scalar (255, 0, 0 ), 3);
+            line(img, imagePoints.at(6), imagePoints.at(7), Scalar(255, 0, 0), 3);
 
             imshow("Show corners", img);
 
-            waitKey(0);
+            waitKey();
         }
     }
 } // namespace task2
