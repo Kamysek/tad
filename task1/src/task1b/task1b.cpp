@@ -45,19 +45,24 @@ namespace task1b
 
         // Load teabox 3D coordinates
         map<TeaBoxCorner, Point3d> tb3DCoordinates = teabox3DCoordinates();
+
         // Load image locations
         map<ImageID, string> imgLocation = imageLocation();
+
         // Load locations where images should be written
         map<ImageID, string> imgWriteLocation = imageWriteLocation();
+
         // Load locations where matlab code gets stored
         map<ImageID, string> writeMatlabLocationTask1b = matlabWriteLocationTask1b();
 
         // store all siftkey points
-        vector<KeyPoint> allKeypoints;
+        map<ImageID, vector<KeyPoint>> allKeypoints;
+
         // store all descriptors
-        vector<Mat> allDescriptors;
+        map<ImageID, Mat> allDescriptors;
+
         // store all 3d model points
-        vector<intersection::Vec3f> all3DModelPoints;
+        map<ImageID, vector<intersection::Vec3f>> all3DModelPoints;
 
         // Cycle through images
         for (int iidInt = DSC_9743; iidInt != LASTIID; iidInt++)
@@ -69,7 +74,7 @@ namespace task1b
             map<string, Mat> rotationTranslationDirection = rotationTranslationDirectionInformation[iid];
 
             // Load image
-            Mat img = imread(imgLocation[iid], IMREAD_GRAYSCALE);
+            Mat img = imread(imgLocation[iid], IMREAD_COLOR);
             if (img.empty())
             {
                 cout << "Could not load image " + to_string(iid) + " from path: " + current_path().generic_string() << endl;
@@ -133,10 +138,10 @@ namespace task1b
             file.close();
 
             // copy intersected points, keypoints and descriptors to storage
-            all3DModelPoints.insert(all3DModelPoints.end(), intersectionPoints.begin(), intersectionPoints.end());
-            allKeypoints.insert(allKeypoints.end(), tmpKeypoints.begin(), tmpKeypoints.end());
-            allDescriptors.push_back(tmpDescriptor);
-
+            all3DModelPoints.insert(pair(ImageID(iidInt), intersectionPoints));
+            allKeypoints.insert(pair(ImageID(iidInt), tmpKeypoints));
+            allDescriptors.insert(pair(ImageID(iidInt), tmpDescriptor));
+           
             // Draw keypoints on picture and write detected keypoints to image
             Mat output;
             drawKeypoints(img, tmpKeypoints, output);            

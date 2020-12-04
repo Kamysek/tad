@@ -1,4 +1,3 @@
-// #include "utility/utility.h"
 #include "customGeometry.h"
 #include "task1a/task1a.h"
 #include "task1b/task1b.h"
@@ -13,7 +12,6 @@ using std::string, std::map, std::cout, std::endl;
 
 int main()
 {
-
         cout << "Solution for task1a \n \n"
                 "NOTE: \n"
                 "Images are only loaded correct if the program is exectuted from /build/src! \n"

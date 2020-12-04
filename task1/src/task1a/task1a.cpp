@@ -22,12 +22,16 @@ namespace task1a
     {
         // Load teabox 3D coordinates
         map<TeaBoxCorner, Point3d> tb3DCoordinates = teabox3DCoordinates();
+
         // Load image locations
         map<ImageID, string> imgLocation = imageLocation();
+
         // Load 2D coordinates of images
         map<ImageID, map<TeaBoxCorner, Point2d>> img2DCoordinates = image2DCoordinates();
+
         // Rotation and translation
         map<ImageID, map<string, Mat>> rotationTranslationDirection;
+
         // Load locations where matlab code gets stored
         map<ImageID, string> writeMatlabLocationTask1a = matlabWriteLocationTask1a();
 

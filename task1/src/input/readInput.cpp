@@ -18,93 +18,93 @@ namespace input
 
         // DSC_9743
         map<TeaBoxCorner, Point2d> dsc_9743_Corners;
-        dsc_9743_Corners.insert(pair(ZERO, Point2d(1373, 1020)));
-        dsc_9743_Corners.insert(pair(ONE, Point2d(2239, 1005)));
-        dsc_9743_Corners.insert(pair(TWO, Point2d(2311, 1114)));
-        dsc_9743_Corners.insert(pair(THREE, Point2d(1342, 1134)));
-        dsc_9743_Corners.insert(pair(SIX, Point2d(2279, 1589)));
-        dsc_9743_Corners.insert(pair(SEVEN, Point2d(1372, 1619)));
+        dsc_9743_Corners.insert(pair(ZERO, Point2d(1375, 1024)));
+        dsc_9743_Corners.insert(pair(ONE, Point2d(2237, 1009)));
+        dsc_9743_Corners.insert(pair(TWO, Point2d(2310, 1116)));
+        dsc_9743_Corners.insert(pair(THREE, Point2d(1347, 1138)));
+        dsc_9743_Corners.insert(pair(SIX, Point2d(2280, 1589)));
+        dsc_9743_Corners.insert(pair(SEVEN, Point2d(1380, 1616)));
 
         image2DCoordinates.insert(pair(DSC_9743, dsc_9743_Corners));
 
         // DSC_9744
         map<TeaBoxCorner, Point2d> dsc_9744_Corners;
-        dsc_9744_Corners.insert(pair(ZERO, Point2d(1660, 934)));
-        dsc_9744_Corners.insert(pair(ONE, Point2d(2204, 1152)));
-        dsc_9744_Corners.insert(pair(TWO, Point2d(1923, 1231)));
-        dsc_9744_Corners.insert(pair(THREE, Point2d(1400, 987)));
-        dsc_9744_Corners.insert(pair(FIVE, Point2d(2175, 1618)));
-        dsc_9744_Corners.insert(pair(SIX, Point2d(1912, 1734)));
-        dsc_9744_Corners.insert(pair(SEVEN, Point2d(1419, 1408)));
+        dsc_9744_Corners.insert(pair(ZERO, Point2d(1660, 938)));
+        dsc_9744_Corners.insert(pair(ONE, Point2d(2204, 1154)));
+        dsc_9744_Corners.insert(pair(TWO, Point2d(1928, 1233)));
+        dsc_9744_Corners.insert(pair(THREE, Point2d(1404, 990)));
+        dsc_9744_Corners.insert(pair(FIVE, Point2d(2177, 1620)));
+        dsc_9744_Corners.insert(pair(SIX, Point2d(1916, 1736)));
+        dsc_9744_Corners.insert(pair(SEVEN, Point2d(1422, 1410)));
 
         image2DCoordinates.insert(pair(DSC_9744, dsc_9744_Corners));
 
         // DSC_9745
         map<TeaBoxCorner, Point2d> dsc_9745_Corners;
-        dsc_9745_Corners.insert(pair(ZERO, Point2d(1837, 992)));
-        dsc_9745_Corners.insert(pair(ONE, Point2d(1890, 1283)));
-        dsc_9745_Corners.insert(pair(TWO, Point2d(1487, 1278)));
-        dsc_9745_Corners.insert(pair(THREE, Point2d(1534, 991)));
-        dsc_9745_Corners.insert(pair(FIVE, Point2d(1872, 1782)));
-        dsc_9745_Corners.insert(pair(SIX, Point2d(1500, 1791)));
+        dsc_9745_Corners.insert(pair(ZERO, Point2d(1886, 859)));
+        dsc_9745_Corners.insert(pair(ONE, Point2d(1936, 1148)));
+        dsc_9745_Corners.insert(pair(TWO, Point2d(1539, 1144)));
+        dsc_9745_Corners.insert(pair(THREE, Point2d(1585, 858)));
+        dsc_9745_Corners.insert(pair(FIVE, Point2d(1920, 1650)));
+        dsc_9745_Corners.insert(pair(SIX, Point2d(1551, 1658)));
 
         image2DCoordinates.insert(pair(DSC_9745, dsc_9745_Corners));
 
         // DSC_9746
         map<TeaBoxCorner, Point2d> dsc_9746_Corners;
-        dsc_9746_Corners.insert(pair(ZERO, Point2d(2115, 1055)));
-        dsc_9746_Corners.insert(pair(ONE, Point2d(1505, 1274)));
-        dsc_9746_Corners.insert(pair(TWO, Point2d(1258, 1175)));
-        dsc_9746_Corners.insert(pair(THREE, Point2d(1874, 987)));
-        dsc_9746_Corners.insert(pair(FOUR, Point2d(2086, 1471)));
-        dsc_9746_Corners.insert(pair(FIVE, Point2d(1512, 1764)));
-        dsc_9746_Corners.insert(pair(SIX, Point2d(1274, 1643)));
+        dsc_9746_Corners.insert(pair(ZERO, Point2d(2316, 979)));
+        dsc_9746_Corners.insert(pair(ONE, Point2d(1710, 1196)));
+        dsc_9746_Corners.insert(pair(TWO, Point2d(1461, 1101)));
+        dsc_9746_Corners.insert(pair(THREE, Point2d(2074, 911)));
+        dsc_9746_Corners.insert(pair(FOUR, Point2d(2287, 1395)));
+        dsc_9746_Corners.insert(pair(FIVE, Point2d(1716, 1686)));
+        dsc_9746_Corners.insert(pair(SIX, Point2d(1476, 1568)));
 
         image2DCoordinates.insert(pair(DSC_9746, dsc_9746_Corners));
 
         // DSC_9747
         map<TeaBoxCorner, Point2d> dsc_9747_Corners;
-        dsc_9747_Corners.insert(pair(ZERO, Point2d(2330, 1173)));
-        dsc_9747_Corners.insert(pair(ONE, Point2d(1345, 1170)));
-        dsc_9747_Corners.insert(pair(TWO, Point2d(1395, 1047)));
-        dsc_9747_Corners.insert(pair(THREE, Point2d(2281, 1054)));
-        dsc_9747_Corners.insert(pair(FOUR, Point2d(2296, 1652)));
-        dsc_9747_Corners.insert(pair(FIVE, Point2d(1377, 1644)));
+        dsc_9747_Corners.insert(pair(ZERO, Point2d(2296, 1129)));
+        dsc_9747_Corners.insert(pair(ONE, Point2d(1308, 1123)));
+        dsc_9747_Corners.insert(pair(TWO, Point2d(1359, 1002)));
+        dsc_9747_Corners.insert(pair(THREE, Point2d(2244, 1011)));
+        dsc_9747_Corners.insert(pair(FOUR, Point2d(2262, 1607)));
+        dsc_9747_Corners.insert(pair(FIVE, Point2d(1343, 1600)));
 
         image2DCoordinates.insert(pair(DSC_9747, dsc_9747_Corners));
 
         // DSC_9748
         map<TeaBoxCorner, Point2d> dsc_9748_Corners;
-        dsc_9748_Corners.insert(pair(ZERO, Point2d(1748, 1180)));
-        dsc_9748_Corners.insert(pair(ONE, Point2d(1317, 942)));
-        dsc_9748_Corners.insert(pair(TWO, Point2d(1587, 885)));
-        dsc_9748_Corners.insert(pair(THREE, Point2d(2056, 1106)));
-        dsc_9748_Corners.insert(pair(FOUR, Point2d(1761, 1666)));
-        dsc_9748_Corners.insert(pair(FIVE, Point2d(1351, 1349)));
-        dsc_9748_Corners.insert(pair(SEVEN, Point2d(2048, 1575)));
+        dsc_9748_Corners.insert(pair(ZERO, Point2d(1749, 1179)));
+        dsc_9748_Corners.insert(pair(ONE, Point2d(1322, 942)));
+        dsc_9748_Corners.insert(pair(TWO, Point2d(1587, 887)));
+        dsc_9748_Corners.insert(pair(THREE, Point2d(2057, 1106)));
+        dsc_9748_Corners.insert(pair(FOUR, Point2d(1761, 1670)));
+        dsc_9748_Corners.insert(pair(FIVE, Point2d(1353, 1351)));
+        dsc_9748_Corners.insert(pair(SEVEN, Point2d(2048, 1576)));
 
         image2DCoordinates.insert(pair(DSC_9748, dsc_9748_Corners));
 
         // DSC_9749
         map<TeaBoxCorner, Point2d> dsc_9749_Corners;
-        dsc_9749_Corners.insert(pair(ZERO, Point2d(1597, 1189)));
-        dsc_9749_Corners.insert(pair(ONE, Point2d(1645, 915)));
+        dsc_9749_Corners.insert(pair(ZERO, Point2d(1601, 1189)));
+        dsc_9749_Corners.insert(pair(ONE, Point2d(1649, 915)));
         dsc_9749_Corners.insert(pair(TWO, Point2d(1938, 909)));
-        dsc_9749_Corners.insert(pair(THREE, Point2d(1981, 1189)));
-        dsc_9749_Corners.insert(pair(FOUR, Point2d(1616, 1678)));
-        dsc_9749_Corners.insert(pair(SEVEN, Point2d(1974, 1681)));
+        dsc_9749_Corners.insert(pair(THREE, Point2d(1983, 1189)));
+        dsc_9749_Corners.insert(pair(FOUR, Point2d(1616, 1683)));
+        dsc_9749_Corners.insert(pair(SEVEN, Point2d(1976, 1681)));
 
         image2DCoordinates.insert(pair(DSC_9749, dsc_9749_Corners));
 
         // DSC_9750
         map<TeaBoxCorner, Point2d> dsc_9750_Corners;
-        dsc_9750_Corners.insert(pair(ZERO, Point2d(1458, 1141)));
+        dsc_9750_Corners.insert(pair(ZERO, Point2d(1461, 1146)));
         dsc_9750_Corners.insert(pair(ONE, Point2d(2054, 970)));
-        dsc_9750_Corners.insert(pair(TWO, Point2d(2300, 1031)));
-        dsc_9750_Corners.insert(pair(THREE, Point2d(1710, 1234)));
-        dsc_9750_Corners.insert(pair(FOUR, Point2d(1470, 1608)));
+        dsc_9750_Corners.insert(pair(TWO, Point2d(2295, 1031)));
+        dsc_9750_Corners.insert(pair(THREE, Point2d(1711, 1236)));
+        dsc_9750_Corners.insert(pair(FOUR, Point2d(1472, 1611)));
         dsc_9750_Corners.insert(pair(SIX, Point2d(2271, 1449)));
-        dsc_9750_Corners.insert(pair(SEVEN, Point2d(1703, 1732)));
+        dsc_9750_Corners.insert(pair(SEVEN, Point2d(1708, 1750)));
 
         image2DCoordinates.insert(pair(DSC_9750, dsc_9750_Corners));
 
@@ -227,30 +227,30 @@ namespace input
     {
         map<ImageIDTask2, string> imageLocation;
 
-        imageLocation.insert(pair<ImageIDTask2, string>(DSC_9751, "../../resources/detection/DSC_9751_Keypoints.JPG"));
-        imageLocation.insert(pair<ImageIDTask2, string>(DSC_9752, "../../resources/detection/DSC_9752_Keypoints.JPG"));
-        imageLocation.insert(pair<ImageIDTask2, string>(DSC_9753, "../../resources/detection/DSC_9753_Keypoints.JPG"));
-        imageLocation.insert(pair<ImageIDTask2, string>(DSC_9754, "../../resources/detection/DSC_9754_Keypoints.JPG"));
-        imageLocation.insert(pair<ImageIDTask2, string>(DSC_9755, "../../resources/detection/DSC_9755_Keypoints.JPG"));
-        imageLocation.insert(pair<ImageIDTask2, string>(DSC_9756, "../../resources/detection/DSC_9756_Keypoints.JPG"));
-        imageLocation.insert(pair<ImageIDTask2, string>(DSC_9757, "../../resources/detection/DSC_9757_Keypoints.JPG"));
-        imageLocation.insert(pair<ImageIDTask2, string>(DSC_9758, "../../resources/detection/DSC_9758_Keypoints.JPG"));
-        imageLocation.insert(pair<ImageIDTask2, string>(DSC_9759, "../../resources/detection/DSC_9759_Keypoints.JPG"));
-        imageLocation.insert(pair<ImageIDTask2, string>(DSC_9760, "../../resources/detection/DSC_9760_Keypoints.JPG"));
-        imageLocation.insert(pair<ImageIDTask2, string>(DSC_9761, "../../resources/detection/DSC_9761_Keypoints.JPG"));
-        imageLocation.insert(pair<ImageIDTask2, string>(DSC_9762, "../../resources/detection/DSC_9762_Keypoints.JPG"));
-        imageLocation.insert(pair<ImageIDTask2, string>(DSC_9763, "../../resources/detection/DSC_9763_Keypoints.JPG"));
-        imageLocation.insert(pair<ImageIDTask2, string>(DSC_9764, "../../resources/detection/DSC_9764_Keypoints.JPG"));
-        imageLocation.insert(pair<ImageIDTask2, string>(DSC_9765, "../../resources/detection/DSC_9765_Keypoints.JPG"));
-        imageLocation.insert(pair<ImageIDTask2, string>(DSC_9766, "../../resources/detection/DSC_9766_Keypoints.JPG"));
-        imageLocation.insert(pair<ImageIDTask2, string>(DSC_9767, "../../resources/detection/DSC_9767_Keypoints.JPG"));
-        imageLocation.insert(pair<ImageIDTask2, string>(DSC_9768, "../../resources/detection/DSC_9768_Keypoints.JPG"));
-        imageLocation.insert(pair<ImageIDTask2, string>(DSC_9769, "../../resources/detection/DSC_9769_Keypoints.JPG"));
-        imageLocation.insert(pair<ImageIDTask2, string>(DSC_9770, "../../resources/detection/DSC_9770_Keypoints.JPG"));
-        imageLocation.insert(pair<ImageIDTask2, string>(DSC_9771, "../../resources/detection/DSC_9771_Keypoints.JPG"));
-        imageLocation.insert(pair<ImageIDTask2, string>(DSC_9772, "../../resources/detection/DSC_9772_Keypoints.JPG"));
-        imageLocation.insert(pair<ImageIDTask2, string>(DSC_9773, "../../resources/detection/DSC_9773_Keypoints.JPG"));
-        imageLocation.insert(pair<ImageIDTask2, string>(DSC_9774, "../../resources/detection/DSC_9774_Keypoints.JPG"));
+        imageLocation.insert(pair<ImageIDTask2, string>(DSC_9751, "../../resources/detection/DSC_9751_Box.JPG"));
+        imageLocation.insert(pair<ImageIDTask2, string>(DSC_9752, "../../resources/detection/DSC_9752_Box.JPG"));
+        imageLocation.insert(pair<ImageIDTask2, string>(DSC_9753, "../../resources/detection/DSC_9753_Box.JPG"));
+        imageLocation.insert(pair<ImageIDTask2, string>(DSC_9754, "../../resources/detection/DSC_9754_Box.JPG"));
+        imageLocation.insert(pair<ImageIDTask2, string>(DSC_9755, "../../resources/detection/DSC_9755_Box.JPG"));
+        imageLocation.insert(pair<ImageIDTask2, string>(DSC_9756, "../../resources/detection/DSC_9756_Box.JPG"));
+        imageLocation.insert(pair<ImageIDTask2, string>(DSC_9757, "../../resources/detection/DSC_9757_Box.JPG"));
+        imageLocation.insert(pair<ImageIDTask2, string>(DSC_9758, "../../resources/detection/DSC_9758_Box.JPG"));
+        imageLocation.insert(pair<ImageIDTask2, string>(DSC_9759, "../../resources/detection/DSC_9759_Box.JPG"));
+        imageLocation.insert(pair<ImageIDTask2, string>(DSC_9760, "../../resources/detection/DSC_9760_Box.JPG"));
+        imageLocation.insert(pair<ImageIDTask2, string>(DSC_9761, "../../resources/detection/DSC_9761_Box.JPG"));
+        imageLocation.insert(pair<ImageIDTask2, string>(DSC_9762, "../../resources/detection/DSC_9762_Box.JPG"));
+        imageLocation.insert(pair<ImageIDTask2, string>(DSC_9763, "../../resources/detection/DSC_9763_Box.JPG"));
+        imageLocation.insert(pair<ImageIDTask2, string>(DSC_9764, "../../resources/detection/DSC_9764_Box.JPG"));
+        imageLocation.insert(pair<ImageIDTask2, string>(DSC_9765, "../../resources/detection/DSC_9765_Box.JPG"));
+        imageLocation.insert(pair<ImageIDTask2, string>(DSC_9766, "../../resources/detection/DSC_9766_Box.JPG"));
+        imageLocation.insert(pair<ImageIDTask2, string>(DSC_9767, "../../resources/detection/DSC_9767_Box.JPG"));
+        imageLocation.insert(pair<ImageIDTask2, string>(DSC_9768, "../../resources/detection/DSC_9768_Box.JPG"));
+        imageLocation.insert(pair<ImageIDTask2, string>(DSC_9769, "../../resources/detection/DSC_9769_Box.JPG"));
+        imageLocation.insert(pair<ImageIDTask2, string>(DSC_9770, "../../resources/detection/DSC_9770_Box.JPG"));
+        imageLocation.insert(pair<ImageIDTask2, string>(DSC_9771, "../../resources/detection/DSC_9771_Box.JPG"));
+        imageLocation.insert(pair<ImageIDTask2, string>(DSC_9772, "../../resources/detection/DSC_9772_Box.JPG"));
+        imageLocation.insert(pair<ImageIDTask2, string>(DSC_9773, "../../resources/detection/DSC_9773_Box.JPG"));
+        imageLocation.insert(pair<ImageIDTask2, string>(DSC_9774, "../../resources/detection/DSC_9774_Box.JPG"));
 
         return imageLocation;
     }

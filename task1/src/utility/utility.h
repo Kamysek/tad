@@ -4,19 +4,13 @@
 #include "../../libs/intersection/customGeometry.h"
 #include <opencv2/opencv.hpp>
 #include <string>
+#include <map>
 
 using namespace std;
 using namespace cv;
 
 namespace utility
 {
-
-    struct Storage
-    {
-        vector<KeyPoint> keypoints;
-        vector<Mat> descriptors;
-        vector<intersection::Vec3f> intersectionPoints;
-    };
 
     // Enum for teabox corners
     enum TeaBoxCorner
@@ -78,6 +72,13 @@ namespace utility
     void printMat(string input, Mat image);
 
     void createMatlabFile(bool points, string output, map<ImageID, string> fileLocations);
+
+    struct Storage
+    {
+        map<ImageID, vector<KeyPoint>> keypoints;
+        map<ImageID, Mat> descriptors;
+        map<ImageID, vector<intersection::Vec3f>> intersectionPoints;
+    };
 
 } // namespace utility
 
