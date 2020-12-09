@@ -21,7 +21,7 @@ namespace task2
 
     Mat intrinsicCameraMatrix = (Mat_<double>(3, 3) << 2960.37845, 0, 1841.68855, 0, 2960.37845, 1235.23369, 0, 0, 1);
 
-    Storage2 task2(Storage storage)
+    void task2(Storage storage)
     {
         // Load image locations
         map<ImageIDTask2, string> imgLocation = imageLocationTask2();
@@ -190,16 +190,6 @@ namespace task2
                 imagePoints.push_back(outputPoint.at(0));
             }
 
-            if (iidInt == DSC_9751)
-            {
-                storage2.matches2Dimage = matches2Dimage;
-                storage2.matches3Dmodel = matches3Dmodel;
-                storage2.rotationMatrix = rotationMatrix;
-                storage2.translationVect = translationVector;
-                storage2.descriptors = descriptorsNewImage;
-                storage2.keypoints = keypointsNewImage;
-            }
-
             cout << "ImagePoints" << endl;
             cout << imagePoints << endl;
 
@@ -226,7 +216,6 @@ namespace task2
             imwrite(imgWriteLocation[iid], img);
         }
 
-        return storage2;
     }
 } // namespace task2
 

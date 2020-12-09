@@ -8,7 +8,7 @@ using namespace utility;
 namespace task3
 {
 
-   extern void task3(Storage2 storage);
+   extern void task3(pair<Mat,Mat> rotationTranslation);
 
    class ReprojectionError;
 

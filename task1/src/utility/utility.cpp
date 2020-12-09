@@ -97,6 +97,69 @@ namespace utility
                << endl;
      }
 
+     void createMatlabFileTask3(string output, map<ImageIDTask3, string> fileLocations)
+     {
+          string line;
+
+          ofstream combined_file("../../matlab/" + output);
+          if (!combined_file.is_open())
+          {
+               cout << "No file has been created!" << endl;
+               throw "No file has been created!";
+          }
+
+          ifstream start;
+          start.open("../../resources/matlab/init/begin.m");
+          if (!start.is_open())
+          {
+               cout << "No file has been created!" << endl;
+               throw "No file has been created!";
+          }
+
+          while (getline(start, line))
+          {
+               combined_file << line << "\n";
+          }
+          start.close();
+
+          for (int iidInt = DSC_7; iidInt != LASTIIDTASK3; iidInt++)
+          {
+               ImageIDTask3 iid = static_cast<ImageIDTask3>(iidInt);
+
+               ifstream file;
+               file.open(fileLocations[iid]);
+               if (!file.is_open())
+               {
+                    cout << "No file has been created!" << endl;
+                    throw "No file has been created!";
+               }
+
+               while (getline(file, line))
+               {
+                    combined_file << line << "\n";
+               }
+
+               file.close();
+          }
+
+          ifstream end;
+          end.open("../../resources/matlab/init/end.m");
+          if (!end.is_open())
+          {
+               cout << "No file has been created!" << endl;
+               throw "No file has been created!";
+          }
+
+          while (getline(end, line))
+          {
+               combined_file << line << "\n";
+          }
+          end.close();
+          
+
+          combined_file.close();
+     }
+
      void createMatlabFile(bool points, string output, map<ImageID, string> fileLocations)
      {
           string line;

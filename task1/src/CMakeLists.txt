@@ -20,7 +20,8 @@ add_subdirectory(input)
 add_subdirectory(task1a)
 add_subdirectory(task1b)
 add_subdirectory(task2)
+add_subdirectory(task21)
 add_subdirectory(task3)
 
 # link libraries
-target_link_libraries(Tasks PRIVATE OpenCV Ceres intersection utility input task1a task1b task2 task3)
+target_link_libraries(Tasks PRIVATE OpenCV Ceres intersection utility input task1a task1b task2 task21 task3)

@@ -255,4 +255,70 @@ namespace input
         return imageLocation;
     }
 
+ map<ImageIDTask3, string> imageLocationTask3()
+    {
+        map<ImageIDTask3, string> imageLocation;
+
+        imageLocation.insert(pair<ImageIDTask3, string>(DSC_6, "../../resources/tracking/color_000006.JPG"));
+        imageLocation.insert(pair<ImageIDTask3, string>(DSC_7, "../../resources/tracking/color_000007.JPG"));
+        imageLocation.insert(pair<ImageIDTask3, string>(DSC_8, "../../resources/tracking/color_000008.JPG"));
+        imageLocation.insert(pair<ImageIDTask3, string>(DSC_9, "../../resources/tracking/color_000009.JPG"));
+        imageLocation.insert(pair<ImageIDTask3, string>(DSC_10, "../../resources/tracking/color_000010.JPG"));
+        imageLocation.insert(pair<ImageIDTask3, string>(DSC_11, "../../resources/tracking/color_000011.JPG"));
+        imageLocation.insert(pair<ImageIDTask3, string>(DSC_12, "../../resources/tracking/color_000012.JPG"));
+        imageLocation.insert(pair<ImageIDTask3, string>(DSC_13, "../../resources/tracking/color_000013.JPG"));
+        imageLocation.insert(pair<ImageIDTask3, string>(DSC_14, "../../resources/tracking/color_000014.JPG"));
+        imageLocation.insert(pair<ImageIDTask3, string>(DSC_15, "../../resources/tracking/color_000015.JPG"));
+        imageLocation.insert(pair<ImageIDTask3, string>(DSC_16, "../../resources/tracking/color_000016.JPG"));
+        imageLocation.insert(pair<ImageIDTask3, string>(DSC_17, "../../resources/tracking/color_000017.JPG"));
+        imageLocation.insert(pair<ImageIDTask3, string>(DSC_18, "../../resources/tracking/color_000018.JPG"));
+        imageLocation.insert(pair<ImageIDTask3, string>(DSC_19, "../../resources/tracking/color_000019.JPG"));
+        imageLocation.insert(pair<ImageIDTask3, string>(DSC_20, "../../resources/tracking/color_000020.JPG"));
+        imageLocation.insert(pair<ImageIDTask3, string>(DSC_21, "../../resources/tracking/color_000021.JPG"));
+        imageLocation.insert(pair<ImageIDTask3, string>(DSC_22, "../../resources/tracking/color_000022.JPG"));
+        imageLocation.insert(pair<ImageIDTask3, string>(DSC_23, "../../resources/tracking/color_000023.JPG"));
+        imageLocation.insert(pair<ImageIDTask3, string>(DSC_24, "../../resources/tracking/color_000024.JPG"));
+        imageLocation.insert(pair<ImageIDTask3, string>(DSC_25, "../../resources/tracking/color_000025.JPG"));
+        imageLocation.insert(pair<ImageIDTask3, string>(DSC_26, "../../resources/tracking/color_000026.JPG"));
+        imageLocation.insert(pair<ImageIDTask3, string>(DSC_27, "../../resources/tracking/color_000027.JPG"));
+        imageLocation.insert(pair<ImageIDTask3, string>(DSC_28, "../../resources/tracking/color_000028.JPG"));
+        imageLocation.insert(pair<ImageIDTask3, string>(DSC_29, "../../resources/tracking/color_000029.JPG"));
+        imageLocation.insert(pair<ImageIDTask3, string>(DSC_30, "../../resources/tracking/color_000030.JPG"));
+
+        return imageLocation;
+    }
+    
+     map<ImageIDTask3, string> matlabWriteLocationTask3()
+    {
+        map<ImageIDTask3, string> imageLocation;
+
+        imageLocation.insert(pair<ImageIDTask3, string>(DSC_6, "../../resources/matlab/task3/color_000006_Rt.m"));
+        imageLocation.insert(pair<ImageIDTask3, string>(DSC_7, "../../resources/matlab/task3/color_000007_Rt.m"));
+        imageLocation.insert(pair<ImageIDTask3, string>(DSC_8, "../../resources/matlab/task3/color_000008_Rt.m"));
+        imageLocation.insert(pair<ImageIDTask3, string>(DSC_9, "../../resources/matlab/task3/color_000009_Rt.m"));
+        imageLocation.insert(pair<ImageIDTask3, string>(DSC_10, "../../resources/matlab/task3/color_000010_Rt.m"));
+        imageLocation.insert(pair<ImageIDTask3, string>(DSC_11, "../../resources/matlab/task3/color_000011_Rt.m"));
+        imageLocation.insert(pair<ImageIDTask3, string>(DSC_12, "../../resources/matlab/task3/color_000012_Rt.m"));
+        imageLocation.insert(pair<ImageIDTask3, string>(DSC_13, "../../resources/matlab/task3/color_000013_Rt.m"));
+        imageLocation.insert(pair<ImageIDTask3, string>(DSC_14, "../../resources/matlab/task3/color_000014_Rt.m"));
+        imageLocation.insert(pair<ImageIDTask3, string>(DSC_15, "../../resources/matlab/task3/color_000015_Rt.m"));
+        imageLocation.insert(pair<ImageIDTask3, string>(DSC_16, "../../resources/matlab/task3/color_000016_Rt.m"));
+        imageLocation.insert(pair<ImageIDTask3, string>(DSC_17, "../../resources/matlab/task3/color_000017_Rt.m"));
+        imageLocation.insert(pair<ImageIDTask3, string>(DSC_18, "../../resources/matlab/task3/color_000018_Rt.m"));
+        imageLocation.insert(pair<ImageIDTask3, string>(DSC_19, "../../resources/matlab/task3/color_000019_Rt.m"));
+        imageLocation.insert(pair<ImageIDTask3, string>(DSC_20, "../../resources/matlab/task3/color_000020_Rt.m"));
+        imageLocation.insert(pair<ImageIDTask3, string>(DSC_21, "../../resources/matlab/task3/color_000021_Rt.m"));
+        imageLocation.insert(pair<ImageIDTask3, string>(DSC_22, "../../resources/matlab/task3/color_000022_Rt.m"));
+        imageLocation.insert(pair<ImageIDTask3, string>(DSC_23, "../../resources/matlab/task3/color_000023_Rt.m"));
+        imageLocation.insert(pair<ImageIDTask3, string>(DSC_24, "../../resources/matlab/task3/color_000024_Rt.m"));
+        imageLocation.insert(pair<ImageIDTask3, string>(DSC_25, "../../resources/matlab/task3/color_000025_Rt.m"));
+        imageLocation.insert(pair<ImageIDTask3, string>(DSC_26, "../../resources/matlab/task3/color_000026_Rt.m"));
+        imageLocation.insert(pair<ImageIDTask3, string>(DSC_27, "../../resources/matlab/task3/color_000027_Rt.m"));
+        imageLocation.insert(pair<ImageIDTask3, string>(DSC_28, "../../resources/matlab/task3/color_000028_Rt.m"));
+        imageLocation.insert(pair<ImageIDTask3, string>(DSC_29, "../../resources/matlab/task3/color_000029_Rt.m"));
+        imageLocation.insert(pair<ImageIDTask3, string>(DSC_30, "../../resources/matlab/task3/color_000030_Rt.m"));
+
+        return imageLocation;
+    }
+
 } // namespace input

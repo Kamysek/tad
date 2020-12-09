@@ -69,9 +69,41 @@ namespace utility
         LASTIIDTASK2
     };
 
+    enum ImageIDTask3
+    {
+        DSC_6 = 6,
+        DSC_7 = 7,
+        DSC_8 = 8,
+        DSC_9 = 9,
+        DSC_10 = 10,
+        DSC_11 = 11,
+        DSC_12 = 12,
+        DSC_13 = 13,
+        DSC_14 = 14,
+        DSC_15 = 15,
+        DSC_16 = 16,
+        DSC_17 = 17,
+        DSC_18 = 18,
+        DSC_19 = 19,
+        DSC_20 = 20,
+        DSC_21 = 21,
+        DSC_22 = 22,
+        DSC_23 = 23,
+        DSC_24 = 24,
+        DSC_25 = 25,
+        DSC_26 = 26,
+        DSC_27 = 27,
+        DSC_28 = 28,
+        DSC_29 = 29,
+        DSC_30 = 30,
+        LASTIIDTASK3
+    };
+
     extern void printMat(string input, Mat image);
 
     extern void createMatlabFile(bool points, string output, map<ImageID, string> fileLocations);
+
+    extern void createMatlabFileTask3(string output, map<ImageIDTask3, string> fileLocations);
 
     struct Storage
     {

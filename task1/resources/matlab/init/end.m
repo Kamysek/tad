@@ -24,7 +24,7 @@ axis equal
 % size
 xlim([-0.7 0.7]);
 ylim([-0.7 0.7]);
-zlim([0 0.35]);
+zlim([0 0.7]);
 
 view(60,15);
 

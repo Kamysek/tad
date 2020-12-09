@@ -2,7 +2,6 @@
 #include "../intersection/customGeometry.h"
 #include "../utility/utility.h"
 #include "math.h"
-// #include "../intersection/raybox.h"
 #include <filesystem>
 #include <fstream>
 #include <iostream>

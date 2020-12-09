@@ -1,7 +1,6 @@
 #include "../input/readInput.h"
 #include "../utility/utility.h"
 #include "customGeometry.h"
-// #include "../intersection/raybox.h"
 #include "ceres/ceres.h"
 #include "ceres/rotation.h"
 #include "math.h"
@@ -27,11 +26,11 @@ using std::string, std::map, std::pair, std::cout, std::endl, std::vector, std::
 
 class ReprojectionError {
 public:
-    ReprojectionError(Eigen::Vector3d& M, Eigen::Vector2d& m, Eigen::Matrix3d& intrinsics)
+    ReprojectionError(Eigen::Vector3d &M, Eigen::Vector2d &m, Eigen::Matrix3d &intrinsics)
             : M_(M), m_(m), intrinsics_(intrinsics) {}
 
     template<typename T>
-    bool operator()(const T* const R, const T* const t, T* residual) const {
+    bool operator()(const T* const Rt, T* residual) const {
         
         // Project point x = R*M + t
         T x[3];
@@ -39,16 +38,11 @@ public:
         X[0] = T(M_.x());
         X[1] = T(M_.y());
         X[2] = T(M_.z());
-        ceres::AngleAxisRotatePoint(R, X, x);
-        //ceres::AngleAxisRotatePoint(R, M_, x);
-        x[0] += t[0];
-        x[1] += t[1];
-        x[2] += t[2];   
+        ceres::AngleAxisRotatePoint(Rt, X, x);
+        x[0] += T(Rt[3]);
+        x[1] += T(Rt[4]);
+        x[2] += T(Rt[5]);
 
-        // Normalize x, y
-        T normalized_x = x[0] / x[2];
-        T normalized_y = x[1] / x[2];
-       
         // Extract infromation from intrinsics matrix
         T focal_length_x = T(intrinsics_(0,0));
         T focal_length_y = T(intrinsics_(1,1));
@@ -58,11 +52,34 @@ public:
         T predicted_x, predicted_y;
 
         // Apply focal length and principal point
-        predicted_x = focal_length_x * normalized_x + principal_point_x;
-        predicted_y = focal_length_y * normalized_y + principal_point_y;
+        predicted_x = focal_length_x * x[0] + principal_point_x * x[2];
+        predicted_y = focal_length_y * x[1] + principal_point_y * x[2];
 
-        residual[0] = predicted_x - m_.x();
-        residual[1] = predicted_y - m_.y();
+        // Normalize x, y
+        T normalized_x = predicted_x / x[2];
+        T normalized_y = predicted_y / x[2];
+       
+
+
+        // // Extract infromation from intrinsics matrix
+        // T focal_length_x = T(intrinsics_(0,0));
+        // T focal_length_y = T(intrinsics_(1,1));
+        // T principal_point_x = T(intrinsics_(0,2));
+        // T principal_point_y = T(intrinsics_(1,2));
+
+        // T predicted_x, predicted_y;
+
+        // // Apply focal length and principal point
+        // predicted_x = focal_length_x * normalized_x + principal_point_x;
+        // predicted_y = focal_length_y * normalized_y + principal_point_y;
+
+        // // Normalize x, y
+        // T normalized_x = x[0] / x[2];
+        // T normalized_y = x[1] / x[2];
+       
+
+        residual[0] = normalized_x - T(m_.x());
+        residual[1] = normalized_y - T(m_.y());
         return true;
     }
 
@@ -74,55 +91,27 @@ private:
 
 namespace task3
 {
-    void task3(Storage2 storage)
+    void task3(pair<Mat,Mat> rotationTranslation)
     {
+    
         // Load image locations
-        map<ImageIDTask2, string> imgLocation = imageLocationTask2();
+        map<ImageIDTask3, string> imgLocation = imageLocationTask3();
+
+        // Load locations where to save matlab code
+        map<ImageIDTask3, string> matlabLocation = matlabWriteLocationTask3();
 
         // Rotation Matrix
-        Mat R; // = storage.rotationMatrix;
+        Mat R = rotationTranslation.first;
 
-        // Declare what you need
-        cv::FileStorage file1("../../resources/R.ext", cv::FileStorage::READ);
-        // Write to file!
-        //file1 << "R" << R;
-        file1["R"] >> R;
-        file1.release();
-
-        // Translation Vector
-        Mat t;// = storage.translationVect;
-
-        // Declare what you need
-        cv::FileStorage file2("../../resources/t.ext", cv::FileStorage::READ);
-        // Write to file!
-        //file2 << "t" << t;
-        file2["t"] >> t;
-        file2.release();
-
-        // Keypoints and descriptors previous frame
-        vector<KeyPoint> keypointsPreviousImage; // = storage.keypoints;
-        // FileStorage fs("../../resources/keypoints.yml", FileStorage::WRITE);
-        // write( fs , "aNameYouLike", keypointsPreviousImage );
-        // fs.release();
-
-        FileStorage fs2("../../resources/keypoints.yml", FileStorage::READ);
-        FileNode kptFileNode = fs2["aNameYouLike"];
-        read( kptFileNode, keypointsPreviousImage);
-        fs2.release();
-
-        Mat descriptorsPreviousImage; // = storage.descriptors;
-        cv::FileStorage file3("../../resources/descriptors.ext", cv::FileStorage::READ);
-        //file3 << "descriptors" << descriptorsPreviousImage;
-        file3["descriptors"] >> descriptorsPreviousImage;
-        file3.release();
+        Mat t = rotationTranslation.second;
 
         // Cycle through images
-        for (int iidInt = DSC_9751; iidInt != LASTIIDTASK2; iidInt++)
+        for (int iidInt = DSC_7; iidInt != LASTIIDTASK3; iidInt++)
         {
-            ImageIDTask2 iid = static_cast<ImageIDTask2>(iidInt);
+            ImageIDTask3 iid = static_cast<ImageIDTask3>(iidInt);
             cout << "Calculate information for image" + to_string(iid) << endl;
 
-            // Load image
+            // Load current frame
             Mat img = imread(imgLocation[iid], IMREAD_COLOR);
             if (img.empty())
             {
@@ -130,259 +119,149 @@ namespace task3
                 throw "Could not load image " + to_string(iid) + " from path: " + current_path().generic_string();
             }
 
-            // Extract keypoints and descriptors of current frame using SIFT Detector
-            Ptr<SIFT> detector = SIFT::create();
-            vector<KeyPoint> keypointsCurrentImage;
-            Mat descriptorsCurrentImage;
-            detector->detectAndCompute(img, noArray(), keypointsCurrentImage, descriptorsCurrentImage);
-
-            // Calculate intersection with object given its keypoints, descriptors
-            map<string, Mat> rotationTranslation;
-            rotationTranslation.insert(pair("rotation", R));
-            
-            // Retrieve camera position
-            Mat translationVector = -R.t() * t;
-            rotationTranslation.insert(pair("translation", translationVector));
-
-            // Returns keypoints, descriptors for intersection points
-            IntersectionData intersectionData = checkIntersection(keypointsPreviousImage, rotationTranslation, descriptorsPreviousImage);
-
-            // Find matches between SIFT Features of previous frame and SIFT Features of the current frame
-            Ptr<DescriptorMatcher> matcher = DescriptorMatcher::create(DescriptorMatcher::BRUTEFORCE);
-            vector<DMatch> matches;
-            matcher->match(descriptorsCurrentImage, intersectionData.tmpDescriptor, matches);
-
-            // Get all 3d points from previous frame and 2d points from current frame of matches
-            vector<Eigen::Vector3d> MPoints3D;
-            vector<Eigen::Vector2d> mPoints2D;
-            for (unsigned int i = 0; i < matches.size(); ++i)
+            // Load previous frame
+            Mat imgPrevious = imread(imgLocation[ImageIDTask3(iid-1)], IMREAD_COLOR);
+            if (imgPrevious.empty())
             {
-                // vector containing all 3d intersection points from training images
-                intersection::Vec3f intersectionPoint = intersectionData.intersectionPoints[matches[i].trainIdx];
-                MPoints3D.push_back(Eigen::Vector3d(intersectionPoint.x, intersectionPoint.y, intersectionPoint.z));
-
-                Point2f point2d = keypointsCurrentImage[matches[i].queryIdx].pt;
-                mPoints2D.push_back(Eigen::Vector2d(point2d.x, point2d.y));
+                cout << "Could not load image " + to_string(iid-1) + " from path: " + current_path().generic_string() << endl;
+                throw "Could not load image " + to_string(iid-1) + " from path: " + current_path().generic_string();
             }
 
+            // Calculate intersection with object given keypoints, descriptors, rotation matrix and camera position
+            map<string, Mat> rotationTranslation;
+            rotationTranslation.insert(pair("rotation", R));
+           
+            Mat camera_position = -R.t() * t;
+            rotationTranslation.insert(pair("translation", camera_position));
+
+            // Extract keypoints and descriptors of previous frame using SIFT Detector
+            Ptr<SIFT> detector = SIFT::create();
+            vector<KeyPoint> keypointsPreviousFrame;
+            Mat descriptorsPreviousFrame;
+            detector->detectAndCompute(imgPrevious, noArray(), keypointsPreviousFrame, descriptorsPreviousFrame);
+
+            // Returns keypoints, descriptors for intersection points
+            IntersectionData intersectionDataPreviousFrame = checkIntersection(keypointsPreviousFrame, rotationTranslation, descriptorsPreviousFrame);
+        
+            // Extract keypoints and descriptors of current frame using SIFT Detector
+            vector<KeyPoint> keypointsCurrentFrame;
+            Mat descriptorsCurrentFrame;
+            detector->detectAndCompute(img, noArray(), keypointsCurrentFrame, descriptorsCurrentFrame);
+
+            // Returns keypoints, descriptors for intersection points
+            IntersectionData intersectionDataCurrentFrame = checkIntersection(keypointsCurrentFrame, rotationTranslation, descriptorsCurrentFrame);
+
+            // Perform matching for two best matching images
+            Ptr<DescriptorMatcher> matcher = DescriptorMatcher::create(DescriptorMatcher::FLANNBASED);
+            vector<vector<DMatch>> knn_matches;
+            matcher->knnMatch(intersectionDataPreviousFrame.tmpDescriptor, intersectionDataCurrentFrame.tmpDescriptor, knn_matches, 2);
+
+            // Apply lowe ratio test
+            const float ratio_thresh = 0.80f;
+            std::vector<DMatch> good_matches;
+            for (size_t i = 0; i < knn_matches.size(); i++)     
+            {
+                if (knn_matches[i][0].distance < ratio_thresh * knn_matches[i][1].distance)
+                {
+                    good_matches.push_back(knn_matches[i][0]);
+                }
+            }
+
+            vector<Eigen::Vector3d> MPoints3D;
+            vector<Eigen::Vector2d> mPoints2D;
+            for (unsigned int i = 0; i < good_matches.size(); ++i)
+            {
+                // Get 3D points of previous frame
+                intersection::Vec3f intersectionPoint = intersectionDataPreviousFrame.intersectionPoints[good_matches[i].queryIdx];
+                MPoints3D.push_back(Eigen::Vector3d(intersectionPoint.x, intersectionPoint.y, intersectionPoint.z));
+                // Get 2D points of current frame
+                Point2f imagePoint = intersectionDataCurrentFrame.tmpKeypoints[good_matches[i].trainIdx].pt;
+                mPoints2D.push_back(Eigen::Vector2d(imagePoint.x, imagePoint.y));
+            }
+
+            // Convert rotation and translation to 
+            Eigen::Matrix<double, 3, 3> rotationMatrix;
+            cv2eigen(R, rotationMatrix);
+            
+            Eigen::Vector3d translationVector;
+            cv2eigen(t, translationVector);
+
+            // Put rotation vector and translation together
+            Eigen::Matrix<double, 6, 1>  Rt;
+            ceres::RotationMatrixToAngleAxis(&rotationMatrix(0, 0), &Rt(0));
+            Rt.tail<3>() = translationVector;
+           
             // Intrinsics for ceres
             Eigen::Matrix3d intrinsics;
             intrinsics << 2960.37845, 0, 1841.68855, 0, 2960.37845, 1235.23369, 0, 0, 1;
 
-            // Create rotation vector
-            Mat rotationVector;
-            Rodrigues(R, rotationVector);
-            
-
-            printMat("Translation", translationVector);
-
-            printMat("Rotation Matrix", R);
-
-            printMat("Rotation Vector", rotationVector);
-
-            // Transform rotation vector and translation vector to eigen
-            // Eigen::Vector3d Rotation;
-            // Rotation << rotationVector.at<double>(0,0), rotationVector.at<double>(1,0), rotationVector.at<double>(2,0);
-        
-            // Eigen::Vector3d Translation;
-            // Translation << t.at<double>(0,0), t.at<double>(1,0), t.at<double>(2,0);
-
-            // Create problem
+            // Build the problem.
             Problem problem;
-            for (int i = 0; i < matches.size(); ++i) {
-                problem.AddResidualBlock(new AutoDiffCostFunction<ReprojectionError, 2, 3, 3>(
-                    new ReprojectionError(MPoints3D.at(i), mPoints2D.at(i), intrinsics)), new ceres::TukeyLoss(4.685), rotationVector.ptr<double>(0), translationVector.ptr<double>(0));
+
+            for (size_t i = 0; i < MPoints3D.size(); ++i) {
+                // Add residual block for matching 3D and 2D points
+                problem.AddResidualBlock(new AutoDiffCostFunction<ReprojectionError, 2, 6>(
+                        new ReprojectionError(MPoints3D.at(i), mPoints2D.at(i), intrinsics)), new ceres::TukeyLoss(4.685) , &Rt(0));
             }
 
+            // Ceres options
             Solver::Options options;
-            options.linear_solver_type = ceres::ITERATIVE_SCHUR;
+            options.linear_solver_type = ceres::DENSE_QR;
             options.use_nonmonotonic_steps = true;
-            options.preconditioner_type = ceres::SCHUR_JACOBI;
-            //options.minimizer_progress_to_stdout = true;
-            //options.check_gradients = true;
+            //options.preconditioner_type = ceres::SCHUR_JACOBI;
+           
+            // Solve and report ceres outcome
             Solver::Summary summary;
             Solve(options, &problem, &summary);
+            std::cout << summary.BriefReport() << "\n";
 
-            // Convert rotation and translation back to cv
-            // Eigen::Vector3d optimized_rvec;
-            // optimized_rvec << rot[0], rot[1], rot[2];
-            // Eigen::Vector3d optimized_tvec;
-            // optimized_tvec << trans[0], trans[1], trans[2];
-
-            // Mat optR = (Mat_<double>(3, 1) << optimized_rvec(0), optimized_rvec(1), optimized_rvec(2));
-            // Mat optT = (Mat_<double>(3, 1) << optimized_tvec(0), optimized_tvec(1), optimized_tvec(2));
-
-            printMat("Optimized Rotation", rotationVector);
-            printMat("Optimized Translation", translationVector);
-
-            Mat optRotMat;
-            Rodrigues(rotationVector, optRotMat);
-
-            printMat("Optimized Rotation Matrix", optRotMat);
+            // Extract optimized rotation and translation
+            Eigen::Matrix<double, 3, 3> optRotationMatrix;
+            ceres::AngleAxisToRotationMatrix(&Rt(0), &optRotationMatrix(0, 0));
+            Eigen::Vector3d optimizedTranslation = Rt.tail<3>();
             
-            R = optRotMat;
-            t = translationVector;
+            // Convert back and store for next iteration
+            eigen2cv(optRotationMatrix, R);
+            printMat("OptR", R);
+            eigen2cv(optimizedTranslation, t);
+            printMat("Optt", t);
+
+            // Calculate Camera Pose
+            Eigen::Vector3d camera_pose = -optRotationMatrix.transpose() * optimizedTranslation;
+            cout << "Camera position" << endl;
+            cout << camera_pose << endl;
+
+            // Create output file for matlab code
+            std::ofstream file;
+            file.open(matlabLocation[iid]);
+            if (!file.is_open())
+            {
+                cout << "No file has been created!" << endl;
+                throw "No file has been created!";
+            }
+
+            file << "%dsc_" + to_string(iid) << endl;
+            file << "%rotation" << endl;
+            file << "R" + to_string(iid) + " = [" << format(R, Formatter::FMT_CSV) << "];" << endl;
+
+            file << "%translation" << endl;
+            file << "t" + to_string(iid) + " = [" + to_string(camera_pose.x()) +
+                        ", " + to_string(camera_pose.y()) +
+                        ", " + to_string(camera_pose.z()) + "];"
+                 << endl;
+
+            file << "pose" + to_string(iid) + " = rigid3d(R" + to_string(iid) + ", t" + to_string(iid) + ");" << endl;
+            file << "vSet = addView(vSet," + to_string(iid) + ", pose" + to_string(iid) + ");" << endl;
+
+            file << "\n"
+                 << endl;
+            file.close();
+
         }
+
+        // Create final matlab file for task 1b
+        createMatlabFileTask3("task3.m", matlabLocation);
+
     }
 
 } // namespace task3
-
-
-/*
-
-int t = 0; 
-            double lambda = 0.001;
-            double u = tau + 1;
-        
-            // Perform for loop
-            do {
-
-                // STEP 1:
-                    // Calculate keypoints and descriptors of current frame
-                    // Get SIFT Features of previous frame and calculate intersections with object
-                    
-                    // Project 3D intersection points of previous frame to current frame using the previous camera position
-                    // Find matches between between projected points and SIFT features of current frame (Get 2D / 3D correspondences by matching between the current and the previous frame)
-
-                // Extract keypoints and descriptors of current frame using SIFT Detector
-                Ptr<SIFT> detector = SIFT::create();
-                vector<KeyPoint> keypointsCurrentImage;
-                Mat descriptorsCurrentImage;
-                detector->detectAndCompute(img, noArray(), keypointsCurrentImage, descriptorsCurrentImage);
-
-                // Calculate intersection with object given its keypoints, descriptors
-                // Store box keypoints and intersection Points
-                vector<KeyPoint> tmpKeypoints;
-                Mat tmpDescriptors;
-                vector<Point3d> intersectionPoints;
-
-                map<string, Mat> rotationTranslation;
-                Mat rotationMatrix = theta(Rect(0,0,3,3));
-                Mat translationVector = theta(Rect(3,0,1,3));
-                rotationTranslation.insert(pair("rotation",  rotationMatrix));
-                rotationTranslation.insert(pair("translation",  translationVector));
-
-                // Cycle through all keypoints to check if they intersect with the box
-                // for (vector<KeyPoint>::iterator iter = keypointsPreviousImage.begin(); iter != keypointsPreviousImage.end(); ++iter)
-                // {
-                //     // Map 2D points to 3D rays
-                //     Point2d pointOnTeabox = Point2d((*iter).pt.x, (*iter).pt.y);
-                //     pair<intersection::Vec3f, intersection::Vec3f> calculatedRay = convert2DPointTo3DRay(rotationTranslation, pointOnTeabox);
-
-                //     // Calculate intersection with box
-                //     intersection::Ray ray(calculatedRay.first, calculatedRay.second.normalize());
-                //     float t;
-                //     if (box.intersect(ray, t))
-                //     {
-                //         // Store intersection keypoint
-                //         tmpKeypoints.push_back(*iter);
-
-                //         // Extract descriptor for intersection point
-                //         int iteratorIndex = iter - keypointsPreviousImage.begin();
-                //         Mat intersectionDescriptors = descriptorsPreviousImage.row(iteratorIndex);
-                //         tmpDescriptors.push_back(intersectionDescriptors);
-
-                //         // Get intersection point
-                //         intersection::Vec3f tmpIntersection = ray.orig + ray.dir * t;
-                //         Point3d intersection = Point3d(tmpIntersection.x, tmpIntersection.y, tmpIntersection.z);
-                //         intersectionPoints.push_back(intersection);
-                //     }
-                // }
-
-                IntersectionData intersectionData = checkIntersection(keypointsPreviousImage, rotationTranslation, descriptorsPreviousImage);
-
-                // Point3d intersection = Point3d(tmpIntersection.x, tmpIntersection.y, tmpIntersection.z);
-                // intersectionPoints.push_back(intersection);
-
-                // Find matches between SIFT Features of previous frame and SIFT Features of the current frame
-                Ptr<DescriptorMatcher> matcher = DescriptorMatcher::create(DescriptorMatcher::BRUTEFORCE);
-                vector<DMatch> matches;
-                matcher->match(descriptorsCurrentImage, tmpDescriptors, matches);
-
-                // Cycle through matches and calculate discrepancies between the x, y coordinates
-                vector<double> x_discrepancy;
-                vector<double> y_discrepancy;
-
-                for (size_t i = 0; i < matches.size(); i++)
-                {
-                    // Extract x, y coordinates
-                    Point2d currentImagePoint = keypointsCurrentImage[matches[i].queryIdx].pt;
-                    Point2d tmpImagePoint = tmpKeypoints[matches[i].trainIdx].pt;
-
-                    // Calculate discrepancy
-                    x_discrepancy.push_back(abs(currentImagePoint.x - tmpImagePoint.x));
-                    y_discrepancy.push_back(abs(currentImagePoint.y - tmpImagePoint.y));
-                }
-
-                vector<double> e;
-                e.insert(e.end(), x_discrepancy.begin(), x_discrepancy.end());
-                e.insert(e.end(), y_discrepancy.begin(), y_discrepancy.end());
-
-                double arr[e.size()];
-                copy(e.begin(), e.end(), arr);
-                
-                double sigma = 1.48257968 * meanAbsoluteDeviation(arr, sizeof(arr) / sizeof(arr[0]));
-                
-                vector<double> tmpDiagonalVector = e;
-
-                transform(tmpDiagonalVector.begin(), tmpDiagonalVector.end(), tmpDiagonalVector.begin(), [](double elem){return elem / 2; });
-
-
-                // Step 2: Calculate Error
-                    
-                    // Calculate discrepancies between matching points 
-                        // e2N×1 ← [du(x,θ) dv(x,θ)]T
-
-                    // Apply MAD
-
-                // Step 3: Compute weight and construct diagonal matrix 
-                
-                    // Ceres apply tukeyloss with c = 4.685
-
-
-                // Step 4: Update parameter or step size
-
-
-
-        //         // The variable to solve for with its initial value.
-        //         double initial_x = 5.0;
-        //         double x = initial_x;
-
-        //         // Build the ceres problem
-        //         Problem problem;
-
-        //         // Set up the only cost function (also known as residual). This uses
-        //         // auto-differentiation to obtain the derivative (jacobian).
-        //         CostFunction* cost_function =
-        //             new AutoDiffCostFunction<CostFunctor, 1, 1>(new CostFunctor);
-        //         problem.AddResidualBlock(cost_function, nullptr, &x);
-
-        //          // Run the solver!
-        //         Solver::Options options;
-        //         options.linear_solver_type = ceres::DENSE_QR;
-        //         options.minimizer_progress_to_stdout = true;
-        //         Solver::Summary summary;
-        //         Solve(options, &problem, &summary);
-
-        //         std::cout << summary.BriefReport() << "\n";
-        //         std::cout << "x : " << initial_x
-        //                     << " -> " << x << "\n";
-
-
-
-
-            }
-            while (t < T && u > tau);
-
-*/
-
-// // Project intersection points from previous camera position to current frame
-// Mat distortionCoefficient = Mat::zeros(4, 1, CV_64FC1);
-
-// // Obtrain rotation vector through rodrigues
-// Mat rotationVector;
-// Rodrigues(rotationMatrix, rotationVector);
-
-// vector<Point2d> outputPoints;
-// // Project 3d intersection coordinates to 2d image coordinates
-// projectPoints(intersectionPoints, rotationVector, translationVector, A, distortionCoefficient, outputPoints);

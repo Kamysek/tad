@@ -27,6 +27,10 @@ namespace input
 
     map<utility::ImageIDTask2, string> imageWriteLocationTask2();
 
+    map<utility::ImageIDTask3, string> imageLocationTask3();
+
+    map<utility::ImageIDTask3, string> matlabWriteLocationTask3();
+
 } // namespace input
 
 #endif
