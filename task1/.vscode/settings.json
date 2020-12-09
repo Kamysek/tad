@@ -72,6 +72,19 @@
         "typeinfo": "cpp",
         "fstream": "cpp",
         "numeric": "cpp",
-        "random": "cpp"
+        "random": "cpp",
+        "clocale": "cpp",
+        "codecvt": "cpp",
+        "compare": "cpp",
+        "condition_variable": "cpp",
+        "thread": "cpp",
+        "typeindex": "cpp",
+        "variant": "cpp",
+        "*.tcc": "cpp",
+        "concepts": "cpp",
+        "memory_resource": "cpp",
+        "ranges": "cpp",
+        "stop_token": "cpp",
+        "cinttypes": "cpp"
     }
 }

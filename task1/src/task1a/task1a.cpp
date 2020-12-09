@@ -43,19 +43,9 @@ namespace task1a
 
             // Load 2D coordinates for given image
             map<TeaBoxCorner, Point2d> img2DCords = img2DCoordinates[iid];
-            if (img2DCoordinates.empty())
-            {
-                cout << "Could not load 2D coordinates of image: " + to_string(iid) << endl;
-                throw "Could not load 2D coordinates of image: " + to_string(iid);
-            }
 
             // Load image
-            Mat img = imread(imgLocation[iid], IMREAD_COLOR);
-            if (img.empty())
-            {
-                cout << "Could not load image " + to_string(iid) + " from path: " + current_path().generic_string() << endl;
-                throw "Could not load image " + to_string(iid) + " from path: " + current_path().generic_string();
-            }
+            Mat img = readImage(imgLocation[iid], iid);
 
             // Vector containing the 3D teabox coordinates and the corresponding 2D image coordinates
             vector<Point2d> img2DVect;

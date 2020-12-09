@@ -13,7 +13,7 @@ using namespace cv;
 namespace task2
 {
 
-    void task2(Storage storage);
+    Storage2 task2(Storage storage);
 
 }
 

@@ -69,9 +69,9 @@ namespace utility
         LASTIIDTASK2
     };
 
-    void printMat(string input, Mat image);
+    extern void printMat(string input, Mat image);
 
-    void createMatlabFile(bool points, string output, map<ImageID, string> fileLocations);
+    extern void createMatlabFile(bool points, string output, map<ImageID, string> fileLocations);
 
     struct Storage
     {
@@ -79,6 +79,27 @@ namespace utility
         map<ImageID, Mat> descriptors;
         map<ImageID, vector<intersection::Vec3f>> intersectionPoints;
     };
+
+    struct Storage2
+    {
+        vector<Point3f> matches3Dmodel;
+        vector<Point2f> matches2Dimage;
+        Mat descriptors;
+        vector<KeyPoint> keypoints;
+        Mat rotationMatrix;
+        Mat translationVect;
+    };
+
+    struct IntersectionData
+    {
+        vector<KeyPoint> tmpKeypoints;
+        Mat tmpDescriptor;
+        vector<intersection::Vec3f> intersectionPoints;
+    };
+
+    IntersectionData checkIntersection(vector<KeyPoint> keypoints, map<string, Mat> rotationTranslationDirection, Mat descriptors);
+
+    Mat readImage(string imageLocation, int iid);
 
 } // namespace utility
 

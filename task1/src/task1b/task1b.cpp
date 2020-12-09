@@ -1,8 +1,8 @@
 #include "../input/readInput.h"
+#include "../intersection/customGeometry.h"
 #include "../utility/utility.h"
-#include "customGeometry.h"
 #include "math.h"
-#include "raybox.h"
+// #include "../intersection/raybox.h"
 #include <filesystem>
 #include <fstream>
 #include <iostream>
@@ -18,27 +18,6 @@ using std::string, std::map, std::pair, std::cout, std::endl, std::vector, std::
 
 namespace task1b
 {
-
-    Mat intrinsicCameraMatrix = (Mat_<double>(3, 3) << 2960.37845, 0, 1841.68855, 0, 2960.37845, 1235.23369, 0, 0, 1);
-
-    pair<intersection::Vec3f, intersection::Vec3f> convert2DPointTo3DRay(map<string, Mat> rotationTranslationDirection, Point2d m)
-    {
-        // extract rotation matrix and camera position
-        Mat rotationMatrix = rotationTranslationDirection["rotation"];
-        Mat cameraPosition = rotationTranslationDirection["translation"];
-
-        // Create homogeneous point
-        Mat homogeneousPoint = (Mat_<double>(3, 1) << m.x, m.y, 1);
-
-        // Get world coordinates
-        homogeneousPoint = (intrinsicCameraMatrix * rotationMatrix).inv() * homogeneousPoint;
-
-        // Add camera origin and direction
-        intersection::Vec3f origin = intersection::Vec3f(cameraPosition.at<double>(0, 0), cameraPosition.at<double>(0, 1), cameraPosition.at<double>(0, 2));
-        intersection::Vec3f direction = intersection::Vec3f(homogeneousPoint.at<double>(0, 0), homogeneousPoint.at<double>(0, 1), homogeneousPoint.at<double>(0, 2));
-
-        return pair(origin, direction);
-    }
 
     Storage task1b(map<ImageID, map<string, Mat>> rotationTranslationDirectionInformation)
     {
@@ -74,12 +53,7 @@ namespace task1b
             map<string, Mat> rotationTranslationDirection = rotationTranslationDirectionInformation[iid];
 
             // Load image
-            Mat img = imread(imgLocation[iid], IMREAD_COLOR);
-            if (img.empty())
-            {
-                cout << "Could not load image " + to_string(iid) + " from path: " + current_path().generic_string() << endl;
-                throw "Could not load image " + to_string(iid) + " from path: " + current_path().generic_string();
-            }
+            Mat img = readImage(imgLocation[iid], iid);
 
             // Detect the keypoints using SIFT Detector
             Ptr<SIFT> detector = SIFT::create();
@@ -87,13 +61,8 @@ namespace task1b
             Mat descriptors;
             detector->detectAndCompute(img, noArray(), keypoints, descriptors);
 
-            // Create boundary box
-            intersection::AABBox box(intersection::Vec3f(0, 0, 0), intersection::Vec3f(0.165, 0.063, 0.093));
-
-            // Store box keypoints and intersection Points
-            vector<KeyPoint> tmpKeypoints;
-            Mat tmpDescriptor;
-            vector<intersection::Vec3f> intersectionPoints;
+            // Calculate Intersection
+            IntersectionData intersectionData = checkIntersection(keypoints, rotationTranslationDirection, descriptors);
 
             // Create output file for matlab code
             ofstream file;
@@ -104,33 +73,10 @@ namespace task1b
                 throw "No file has been created!";
             }
 
-            // Cycle through all keypoints to check if they intersect with the box
-            for (vector<KeyPoint>::iterator iter = keypoints.begin(); iter != keypoints.end(); ++iter)
+            // Write matlab code to file
+            for (size_t i = 0; i < intersectionData.intersectionPoints.size(); i++)
             {
-                // Map 2D points to 3D rays
-                Point2d pointOnTeabox = Point2d((*iter).pt.x, (*iter).pt.y);
-                pair<intersection::Vec3f, intersection::Vec3f> calculatedRay = convert2DPointTo3DRay(rotationTranslationDirection, pointOnTeabox);
-
-                // Calculate intersection with box
-                intersection::Ray ray(calculatedRay.first, calculatedRay.second.normalize());
-                float t;
-                if (box.intersect(ray, t))
-                {
-                    // Store intersection keypoint
-                    tmpKeypoints.push_back(*iter);
-
-                    // Extract descriptor for intersection point
-                    int iteratorIndex = iter - keypoints.begin();
-                    Mat intersectionDescriptor = descriptors.row(iteratorIndex);
-                    tmpDescriptor.push_back(intersectionDescriptor);
-
-                    // Get intersection point
-                    intersection::Vec3f intersection = ray.orig + ray.dir * t;
-                    intersectionPoints.push_back(intersection);
-
-                    // Write matlab code to file
-                    file << "scatter3(" + to_string(intersection.x) + ", " + to_string(intersection.y) + ", " + to_string(intersection.z) + ", 1);" << endl;
-                }
+                file << "scatter3(" + to_string(intersectionData.intersectionPoints[i].x) + ", " + to_string(intersectionData.intersectionPoints[i].y) + ", " + to_string(intersectionData.intersectionPoints[i].z) + ", 1);" << endl;
             }
 
             // Close file
@@ -138,15 +84,14 @@ namespace task1b
             file.close();
 
             // copy intersected points, keypoints and descriptors to storage
-            all3DModelPoints.insert(pair(ImageID(iidInt), intersectionPoints));
-            allKeypoints.insert(pair(ImageID(iidInt), tmpKeypoints));
-            allDescriptors.insert(pair(ImageID(iidInt), tmpDescriptor));
-           
+            all3DModelPoints.insert(pair(ImageID(iidInt), intersectionData.intersectionPoints));
+            allKeypoints.insert(pair(ImageID(iidInt), intersectionData.tmpKeypoints));
+            allDescriptors.insert(pair(ImageID(iidInt), intersectionData.tmpDescriptor));
+
             // Draw keypoints on picture and write detected keypoints to image
             Mat output;
-            drawKeypoints(img, tmpKeypoints, output);            
+            drawKeypoints(img, intersectionData.tmpKeypoints, output);
             imwrite(imgWriteLocation[iid], output);
-
         }
 
         // Create final matlab file for task 1b
@@ -159,4 +104,5 @@ namespace task1b
 
         return storage;
     }
+
 } // namespace task1b

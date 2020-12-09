@@ -1,6 +1,6 @@
 #include "../input/readInput.h"
+#include "../intersection/customGeometry.h"
 #include "../utility/utility.h"
-#include "customGeometry.h"
 #include "math.h"
 #include <filesystem>
 #include <fstream>
@@ -21,14 +21,14 @@ namespace task2
 
     Mat intrinsicCameraMatrix = (Mat_<double>(3, 3) << 2960.37845, 0, 1841.68855, 0, 2960.37845, 1235.23369, 0, 0, 1);
 
-    void task2(Storage storage)
+    Storage2 task2(Storage storage)
     {
         // Load image locations
         map<ImageIDTask2, string> imgLocation = imageLocationTask2();
-       
+
         // Load locations where images should be written
         map<ImageIDTask2, string> imgWriteLocation = imageWriteLocationTask2();
-        
+
         // Load teabox 3D coordinates
         map<TeaBoxCorner, Point3d> tb3DCoordinates = teabox3DCoordinates();
 
@@ -39,6 +39,9 @@ namespace task2
             TeaBoxCorner tbc = static_cast<TeaBoxCorner>(tbcInt);
             tbc3DVect.push_back(tb3DCoordinates[tbc]);
         }
+
+        // Store information for task3
+        Storage2 storage2;
 
         // Cycle through images
         for (int iidInt = DSC_9751; iidInt != LASTIIDTASK2; iidInt++)
@@ -67,13 +70,13 @@ namespace task2
             Mat bestDescriptorsImage1;
             vector<KeyPoint> bestKeypointsImage1;
             vector<intersection::Vec3f> bestIntersectionPointsImage1;
-            
+
             Mat bestDescriptorsImage2;
             vector<KeyPoint> bestKeypointsImage2;
             vector<intersection::Vec3f> bestIntersectionPointsImage2;
-            
+
             double distance = INFINITY;
-            for (int iidInt2 = DSC_9743; iidInt2 != LASTIID; iidInt2++) 
+            for (int iidInt2 = DSC_9743; iidInt2 != LASTIID; iidInt2++)
             {
                 ImageID iid2 = static_cast<ImageID>(iidInt2);
 
@@ -81,7 +84,7 @@ namespace task2
                 vector<KeyPoint> tmpKeypoints = storage.keypoints[iid2];
                 Mat tmpDescriptors = storage.descriptors[iid2];
                 vector<intersection::Vec3f> tmpIntersectionPoints = storage.intersectionPoints[iid2];
-                
+
                 // Perform matching
                 vector<vector<DMatch>> knn_matches;
                 matcher->knnMatch(descriptorsNewImage, tmpDescriptors, knn_matches, 2);
@@ -106,12 +109,13 @@ namespace task2
                 {
                     median = (good_matches[size / 2 - 1].distance + good_matches[size / 2].distance) / 2;
                 }
-                else 
+                else
                 {
                     median = good_matches[size / 2].distance;
                 }
 
-                if ( median < distance){
+                if (median < distance)
+                {
                     // Update information
                     distance = median;
                     bestDescriptorsImage1 = tmpDescriptors;
@@ -164,7 +168,7 @@ namespace task2
             // Prepare for solve pnp ransac
             Mat distortionCoefficient = Mat::zeros(4, 1, CV_64FC1);
             Mat rotationVector = Mat::zeros(3, 1, CV_64FC1);
-            Mat translationVector = Mat::zeros(3, 1, CV_64FC1);            
+            Mat translationVector = Mat::zeros(3, 1, CV_64FC1);
 
             solvePnPRansac(matches3Dmodel, matches2Dimage, intrinsicCameraMatrix, distortionCoefficient, rotationVector, translationVector, true, 59, 25, 0.99, noArray(), SOLVEPNP_P3P);
 
@@ -185,7 +189,17 @@ namespace task2
 
                 imagePoints.push_back(outputPoint.at(0));
             }
-            
+
+            if (iidInt == DSC_9751)
+            {
+                storage2.matches2Dimage = matches2Dimage;
+                storage2.matches3Dmodel = matches3Dmodel;
+                storage2.rotationMatrix = rotationMatrix;
+                storage2.translationVect = translationVector;
+                storage2.descriptors = descriptorsNewImage;
+                storage2.keypoints = keypointsNewImage;
+            }
+
             cout << "ImagePoints" << endl;
             cout << imagePoints << endl;
 
@@ -208,10 +222,11 @@ namespace task2
             line(img, imagePoints.at(5), imagePoints.at(6), Scalar(255, 0, 0), 3);
 
             line(img, imagePoints.at(6), imagePoints.at(7), Scalar(255, 0, 0), 3);
-     
-            imwrite(imgWriteLocation[iid], img);
 
+            imwrite(imgWriteLocation[iid], img);
         }
+
+        return storage2;
     }
 } // namespace task2
 
@@ -225,7 +240,7 @@ namespace task2
 // for (unsigned int i = 20; i < 200; ++i)
 // {
 //     for (unsigned int j = 6; j < 100; ++j)
-//     {    
+//     {
 //         solvePnPRansac(matches3Dmodel, matches2Dimage, intrinsicCameraMatrix, distortionCoefficient, rotationVector, translationVector, true, i, j, 0.99, noArray(), SOLVEPNP_P3P);
 
 //         // Obtrain rotation matrix through rodrigues
@@ -286,7 +301,6 @@ namespace task2
 //         //                         pow(abs(2294.0 - imagePoints.at(5).x) + abs(1824.0 - imagePoints.at(5).y), 2) +
 //         //                         pow(abs(2103.0 - imagePoints.at(6).x) + abs(1887.0 - imagePoints.at(6).y), 2) +
 //         //                         pow(abs(1385.0 - imagePoints.at(7).x) + abs(1758.0 - imagePoints.at(7).y), 2));
-
 
 //         // 71
 //         double tmpError = sqrt( pow(abs(1233.0 - imagePoints.at(0).x) + abs(1208.0 - imagePoints.at(0).y), 2) +

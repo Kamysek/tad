@@ -13,7 +13,7 @@ using namespace cv;
 namespace task1b
 {
 
-   Storage task1b(map<ImageID, map<string, Mat>> rotationTranslationDirectionInformation);
+   extern Storage task1b(map<ImageID, map<string, Mat>> rotationTranslationDirectionInformation);
 
 }
 
